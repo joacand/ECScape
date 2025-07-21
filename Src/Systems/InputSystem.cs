@@ -1,0 +1,44 @@
+﻿using ECScape.Components;
+using ECScape.Engine;
+using ECScape.Entities;
+using System.Runtime.InteropServices;
+
+namespace ECScape.Systems;
+
+internal sealed partial class InputSystem : ISystem
+{
+    [LibraryImport("user32.dll")]
+    internal static partial short GetAsyncKeyState(int vKey);
+
+    private static bool IsKeyDown(ConsoleKey key)
+    {
+        return (GetAsyncKeyState((int)key) & 0x8000) != 0;
+    }
+
+    public void Update(World world, float deltaTime)
+    {
+        Parallel.ForEach(world.Entities
+            .Where(x => x.HasComponent<IsPlayerControllable>() && x.HasComponent<Velocity>()), Update);
+    }
+
+    private void Update(Entity entity)
+    {
+        HandlePlayerInput(entity.GetRequiredComponent<Velocity>());
+    }
+
+    private static void HandlePlayerInput(Velocity velocity)
+    {
+        if (IsKeyDown(ConsoleKey.W))
+        {
+            velocity.Y = Configuration.PlayerMovementVertical;
+        }
+        if (IsKeyDown(ConsoleKey.A))
+        {
+            velocity.X = -Configuration.PlayerMovementHorizontal;
+        }
+        if (IsKeyDown(ConsoleKey.D))
+        {
+            velocity.X = Configuration.PlayerMovementHorizontal;
+        }
+    }
+}
