@@ -1,3 +1,3 @@
 ﻿namespace ECScape.Components;
 
-internal interface IComponent;
+public interface IComponent;

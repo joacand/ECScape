@@ -2,7 +2,7 @@
 
 namespace ECScape.Entities;
 
-internal record Entity
+public record Entity
 {
     public int Id { get; set; }
     private Dictionary<Type, IComponent> Components { get; set; } = [];

@@ -3,7 +3,7 @@ using ECScape.Systems;
 
 namespace ECScape.Engine;
 
-internal sealed class World
+public sealed class World
 {
     public List<Entity> Entities { get; } = [];
     public List<ISystem> Systems { get; } = [];

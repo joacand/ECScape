@@ -3,27 +3,39 @@ using ECScape.Systems;
 
 namespace ECScape.Engine;
 
-internal sealed class Game
+public sealed class Game
 {
     private bool isRunning = true;
     private readonly World world = new();
     private readonly GameTimer gameTimer = new();
 
-    public Game()
+    private ISystem? inputSystem;
+    private ISystem? renderer;
+    public Game(ISystem? inputSystem)
     {
-        Console.CursorVisible = false;
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
-        Console.BackgroundColor = ConsoleColor.DarkBlue;
-        Console.Clear(); // Apply background color to entire screen
-        StartKeyPressListener();
+        this.inputSystem = inputSystem;
     }
 
-    public void InitializeLoop()
+    public void InitializeLoop(ISystem? renderer = null)
     {
+        this.renderer = renderer == null ? new RenderSystem() : renderer;
         Seeder.Seed(world);
-        world.Systems.AddRange(new InputSystem(), new NpcSystem(), new PhysicsSystem(), new DamageSystem(), new RenderSystem(), new GameStateSystem());
+        if (inputSystem != null)
+        {
+            world.Systems.Add(inputSystem);
+        }
+        world.Systems.AddRange(new NpcSystem(), new PhysicsSystem(), new DamageSystem(), this.renderer, new GameStateSystem());
 
-        Loop();
+        if (renderer == null)
+        {
+            Loop();
+        }
+    }
+
+    public void RunSingleFrame()
+    {
+        gameTimer.Update();
+        world.Draw(gameTimer.DeltaTime);
     }
 
     public void Loop()
@@ -41,12 +53,12 @@ internal sealed class Game
         if (gameOver)
         {
             ClearGame();
-            InitializeLoop();
+            InitializeLoop(renderer);
         }
         else
         {
             Console.WriteLine("Game loop has ended.");
-            Console.ReadLine();
+            //  Console.ReadLine();
         }
     }
 
@@ -68,35 +80,14 @@ internal sealed class Game
         catch (GameOverException)
         {
             Console.WriteLine("Game over. Press any key to restart.");
-            Console.ReadLine();
+            //  Console.ReadLine();
             return true;
         }
         catch (GameWinException)
         {
             Console.WriteLine("You win! Press any key to restart.");
-            Console.ReadLine();
+            // Console.ReadLine();
             return true;
-        }
-    }
-
-    private void StartKeyPressListener()
-    {
-        Thread keyPressListener = new(ListenForKeyPress)
-        {
-            IsBackground = true
-        };
-        keyPressListener.Start();
-    }
-
-    private void ListenForKeyPress(object? obj)
-    {
-        while (isRunning)
-        {
-            var k = Console.ReadKey(true);
-            if (k.Key == ConsoleKey.Escape)
-            {
-                isRunning = false;
-            }
         }
     }
 }

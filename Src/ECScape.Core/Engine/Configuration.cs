@@ -1,6 +1,6 @@
 ﻿namespace ECScape.Engine;
 
-internal static class Configuration
+public static class Configuration
 {
     public const double TargetFrameRate = 60.0f;
     public const double MovementDecayRate = 13;

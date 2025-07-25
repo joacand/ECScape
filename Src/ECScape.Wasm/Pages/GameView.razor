@@ -1,0 +1,67 @@
+﻿@page "/"
+@using ECScape.Engine
+@using ECScape.Systems
+@using ECScape.Wasm.Systems
+@inject IJSRuntime JS
+@implements IDisposable
+
+<div style="display: grid; grid-template-columns: repeat(@GridWidth, 10px); font-family: monospace;">
+    @for (int y = 0; y < GridHeight; y++)
+    {
+        for (int x = 0; x < GridWidth; x++)
+        {
+            var entry = renderer.backBuffer[x, y];
+            var symbol = entry.Symbol;
+            var color = entry.Color;
+            <div style="width:10px; height:10px; text-align:center; background:@GetColor(color);">
+                @symbol
+            </div>
+            renderer.frontBuffer[x, y] = entry;
+        }
+    }
+</div>
+
+@code {
+    const int GridWidth = 120;
+    const int GridHeight = 30;
+    private Game game;
+    private WebRenderSystem renderer;
+    private Timer gameLoopTimer;
+
+    protected override async void OnInitialized()
+    {
+        UiInterface.SetBounds(GridWidth, GridHeight);
+        renderer = new WebRenderSystem(GridWidth, GridHeight);
+        game = new Game(InputInterop.InputSystem);
+        game.InitializeLoop(renderer);
+        await JS.InvokeVoidAsync("initializeKeyListeners");
+
+        gameLoopTimer = new Timer(_ =>
+        {
+            InvokeAsync(() =>
+            {
+                game.RunSingleFrame();
+                StateHasChanged();
+            });
+        }, null, 0, 16); // ~60fps
+    }
+
+    private string GetColor(ConsoleColor color) => color switch
+    {
+        ConsoleColor.Black => "black",
+        ConsoleColor.Red => "red",
+        ConsoleColor.Green => "green",
+        ConsoleColor.Yellow => "yellow",
+        ConsoleColor.Blue => "blue",
+        ConsoleColor.Magenta => "magenta",
+        ConsoleColor.Cyan => "cyan",
+        ConsoleColor.White => "white",
+        ConsoleColor.Gray => "gray",
+        _ => "white"
+    };
+
+    public void Dispose()
+    {
+        gameLoopTimer?.Dispose();
+    }
+}

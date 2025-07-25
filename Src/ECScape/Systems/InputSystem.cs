@@ -1,9 +1,10 @@
 ﻿using ECScape.Components;
 using ECScape.Engine;
 using ECScape.Entities;
+using ECScape.Systems;
 using System.Runtime.InteropServices;
 
-namespace ECScape.Systems;
+namespace ECScape.Terminal.Systems;
 
 internal sealed partial class InputSystem : ISystem
 {

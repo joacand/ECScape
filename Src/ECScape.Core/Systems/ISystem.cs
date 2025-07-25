@@ -2,7 +2,7 @@
 
 namespace ECScape.Systems;
 
-internal interface ISystem
+public interface ISystem
 {
     public void Update(World world, float deltaTime);
 }
