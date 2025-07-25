@@ -19,5 +19,23 @@ internal sealed class World
         }
     }
 
+    public Entity? GetEntityWith(params Type[] types)
+    {
+        foreach (var e in Entities)
+        {
+            if (types.All(e.HasComponent))
+            {
+                return e;
+            }
+        }
+        return null;
+    }
+
     public void Draw(float deltaTime) => Systems.ForEach(x => x.Update(this, deltaTime));
+
+    public void Clear()
+    {
+        Entities.Clear();
+        Systems.Clear();
+    }
 }

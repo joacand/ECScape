@@ -1,77 +1,36 @@
-﻿using ECScape.Components;
-using ECScape.Entities;
+﻿using ECScape.Entities;
 
 namespace ECScape.Engine;
 
 internal static class Seeder
 {
-    private static int idCounter = 0;
-
     public static void Seed(World world)
     {
-        CreateEntity(world, [
-                new AffectedByGravity(),
-                new LimitedByBounds(),
-                new Position(0, 0),
-                new IsDrawable { Symbol = '#', Color = ConsoleColor.Green },
-                new Size(2,2),
-                new Velocity(),
-                new IsPlayerControllable(),
-            ]);
-        CreateEntity(world, [
-                new AffectedByGravity(),
-                new LimitedByBounds(),
-                new Position(30, 0),
-                new Npc(),
-                new IsDrawable { Symbol = '@', Color = ConsoleColor.Blue },
-                new Size(3,2),
-                new Velocity(),
-            ]);
-        CreateEntity(world, [
-                new AffectedByGravity(),
-                new LimitedByBounds(),
-                new Position(10, 0),
-                new Npc(),
-                new IsDrawable { Symbol = '%', Color = ConsoleColor.Blue },
-                new Size(2,1),
-                new Velocity(),
-            ]);
+        EntityFactory.CreatePlayer(world, 0, 0);
 
-        // Create ground
-        for (var g = 0; g < 3; g++)
+        EntityFactory.CreateEnemy(world, 30, 0, 'X', 3, 2);
+        EntityFactory.CreateEnemy(world, 30, 0, '%', 3, 1);
+        EntityFactory.CreateEnemy(world, 10, 0, '#', 2, 1);
+
+        EntityFactory.CreateCollectable(world, 25, 10, '$', 3, 4);
+        EntityFactory.CreateCollectable(world, 50, 10, '♥', 2, 2);
+
+        // Ground blocks
+        for (var i = 0; i < 3; i++)
         {
-            for (var i = 0; i < Console.WindowWidth; i++)
+            for (var j = 0; j < Console.WindowWidth; j++)
             {
-                CreateEntity(world, [
-                    new Position(i, Console.WindowHeight-1-g),
-                    new IsDrawable { Symbol = '=',  Color = ConsoleColor.Gray },
-                    new Size(1,1),
-                    new LimitedByBounds(),
-                    new Solid(),
-            ]);
+                EntityFactory.CreateGroundBlock(world, j, UiInterface.WorldBottom - i);
             }
         }
 
-        // Create block in cloud
-        for (var g = 0; g < 3; g++)
+        // Cloud blocks
+        for (var i = 0; i < 3; i++)
         {
-            for (var i = 0; i < 3; i++)
+            for (var j = 0; j < 3; j++)
             {
-                CreateEntity(world, [
-                    new Position(20-i, 20-g),
-                    new IsDrawable { Symbol = '=', Color = ConsoleColor.Magenta },
-                    new Size(1,1),
-                    new LimitedByBounds(),
-                    new Solid(),
-            ]);
+                EntityFactory.CreateCloudBlock(world, 20 - j, 20 - i);
             }
         }
-    }
-
-    private static void CreateEntity(World world, List<IComponent> components)
-    {
-        var id = idCounter++;
-        var entity = new Entity(id, components);
-        world.Entities.Add(entity);
     }
 }

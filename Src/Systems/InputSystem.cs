@@ -18,7 +18,7 @@ internal sealed partial class InputSystem : ISystem
     public void Update(World world, float deltaTime)
     {
         Parallel.ForEach(world.Entities
-            .Where(x => x.HasComponent<IsPlayerControllable>() && x.HasComponent<Velocity>()), Update);
+            .Where(x => x.HasComponent<PlayerControllable>() && x.HasComponent<Velocity>()), Update);
     }
 
     private void Update(Entity entity)

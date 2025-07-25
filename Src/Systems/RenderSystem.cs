@@ -36,15 +36,17 @@ internal sealed class RenderSystem : ISystem
         }
 
         world.Entities
-            .Where(x => x.HasComponent<Position>() && x.HasComponent<IsDrawable>()).ToList()
+            .Where(x => x.HasComponent<Position>() && x.HasComponent<Drawable>()).ToList()
             .ForEach(Draw);
+
+        DrawInterface();
 
         Render();
     }
 
     private void Draw(Entity entity)
     {
-        var drawable = entity.GetRequiredComponent<IsDrawable>();
+        var drawable = entity.GetRequiredComponent<Drawable>();
         var position = entity.GetRequiredComponent<Position>();
         var size = entity.GetComponent<Size>() ?? new Size(1, 1);
 
@@ -60,6 +62,29 @@ internal sealed class RenderSystem : ISystem
                 }
 
                 backBuffer[(int)newPos.Left, (int)newPos.Top] = new(drawable.Symbol, drawable.Color);
+            }
+        }
+    }
+
+    private void DrawInterface()
+    {
+        const string GameTitle = "  ECSape  ";
+        var titleIndex = 0;
+
+        // Background
+        for (var i = 0; i < Console.WindowWidth; i++)
+        {
+            for (var j = UiInterface.InterfaceStart; j < UiInterface.InterfaceEnd; j++)
+            {
+                if (i > 3 && j == 1 && titleIndex < GameTitle.Length)
+                {
+                    var c = GameTitle[titleIndex++];
+                    backBuffer[i, j] = new(c, ConsoleColor.Cyan);
+                }
+                else
+                {
+                    backBuffer[i, j] = new('▧', ConsoleColor.Gray);
+                }
             }
         }
     }

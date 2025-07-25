@@ -1,4 +1,5 @@
-﻿using ECScape.Systems;
+﻿using ECScape.Exceptions;
+using ECScape.Systems;
 
 namespace ECScape.Engine;
 
@@ -12,29 +13,70 @@ internal sealed class Game
     {
         Console.CursorVisible = false;
         Console.OutputEncoding = System.Text.Encoding.UTF8;
+        Console.BackgroundColor = ConsoleColor.DarkBlue;
+        Console.Clear(); // Apply background color to entire screen
+        StartKeyPressListener();
     }
 
     public void InitializeLoop()
     {
-        StartKeyPressListener();
-
         Seeder.Seed(world);
-        world.Systems.AddRange(new InputSystem(), new NpcSystem(), new PhysicsSystem(), new RenderSystem());
+        world.Systems.AddRange(new InputSystem(), new NpcSystem(), new PhysicsSystem(), new DamageSystem(), new RenderSystem(), new GameStateSystem());
 
         Loop();
     }
 
     public void Loop()
     {
+        var gameOver = false;
         while (isRunning)
+        {
+            gameOver = GameLoop();
+            if (gameOver)
+            {
+                break;
+            }
+        }
+
+        if (gameOver)
+        {
+            ClearGame();
+            InitializeLoop();
+        }
+        else
+        {
+            Console.WriteLine("Game loop has ended.");
+            Console.ReadLine();
+        }
+    }
+
+    private void ClearGame()
+    {
+        world.Clear();
+        Console.Clear();
+    }
+
+    private bool GameLoop()
+    {
+        try
         {
             gameTimer.Update();
             world.Draw(gameTimer.DeltaTime);
             gameTimer.LimitFrameRate();
+            return false;
         }
-
-        Console.WriteLine("Game loop has ended.");
-        Console.ReadLine();
+        catch (GameOverException)
+        {
+            Console.WriteLine("Game over. Press any key to restart.");
+            Console.ReadLine();
+            return true;
+        }
+        catch (GameWinException)
+        {
+            Console.WriteLine("You win! Press any key to restart.");
+            Console.ReadLine();
+            return true;
+        }
     }
 
     private void StartKeyPressListener()

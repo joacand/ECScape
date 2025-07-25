@@ -45,13 +45,13 @@ internal sealed class PhysicsSystem : ISystem
         {
             position.Left = Console.WindowWidth - size.Width;
         }
-        if (position.Top < 0)
+        if (position.Top < UiInterface.WorldTop)
         {
-            position.Top = 0;
+            position.Top = UiInterface.WorldTop;
         }
-        if (position.Top + size.Height >= Console.WindowHeight)
+        if (position.Top + size.Height >= UiInterface.WorldBottom)
         {
-            position.Top = Console.WindowHeight - 1;
+            position.Top = UiInterface.WorldBottom;
         }
     }
 
