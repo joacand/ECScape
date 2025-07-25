@@ -11,8 +11,8 @@ internal sealed class RenderSystem : ISystem
 
     public RenderSystem()
     {
-        var width = Console.WindowWidth;
-        var height = Console.WindowHeight;
+        var width = UiInterface.TotalWidth;
+        var height = UiInterface.TotalHeight;
         frontBuffer = new Entry[width, height];
         backBuffer = new Entry[width, height];
         for (var x = 0; x < width; x++)
@@ -72,7 +72,7 @@ internal sealed class RenderSystem : ISystem
         var titleIndex = 0;
 
         // Background
-        for (var i = 0; i < Console.WindowWidth; i++)
+        for (var i = 0; i < UiInterface.TotalWidth; i++)
         {
             for (var j = UiInterface.InterfaceStart; j < UiInterface.InterfaceEnd; j++)
             {

@@ -18,7 +18,7 @@ internal static class Seeder
         // Ground blocks
         for (var i = 0; i < 3; i++)
         {
-            for (var j = 0; j < Console.WindowWidth; j++)
+            for (var j = 0; j < UiInterface.WorldWidth; j++)
             {
                 EntityFactory.CreateGroundBlock(world, j, UiInterface.WorldBottom - i);
             }
