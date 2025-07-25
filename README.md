@@ -11,3 +11,9 @@ This project was created to:
 
 - [.NET 9](https://dotnet.microsoft.com/)  
 - Windows terminal (uses `user32.dll` for async key input)
+
+## Gameplay
+
+🖼️ Evidently, stunning graphics weren’t the goal with the project.
+
+![Gameplay](./Examples/gameplay.gif)
