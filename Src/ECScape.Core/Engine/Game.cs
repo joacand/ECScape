@@ -3,23 +3,11 @@ using ECScape.Core.Systems;
 
 namespace ECScape.Core.Engine;
 
-public sealed class Game
+public sealed class Game(InputSystem inputSystem)
 {
-    private bool isRunning = true;
     private readonly World world = new();
     private readonly GameTimer gameTimer = new();
-    private readonly InputSystem inputSystem;
-
-    public Game(InputSystem inputSystem)
-    {
-        this.inputSystem = inputSystem;
-        Console.CursorVisible = false;
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
-        Console.BackgroundColor = ConsoleColor.DarkBlue;
-        Console.Clear(); // Apply background color to entire screen
-        StartKeyPressListener();
-    }
-
+    private readonly InputSystem inputSystem = inputSystem;
     public void InitializeLoop()
     {
         Seeder.Seed(world);
@@ -30,8 +18,8 @@ public sealed class Game
 
     public void Loop()
     {
-        var gameOver = false;
-        while (isRunning)
+        bool gameOver;
+        while (true)
         {
             gameOver = GameLoop();
             if (gameOver)
@@ -78,27 +66,6 @@ public sealed class Game
             Console.WriteLine("You win! Press any key to restart.");
             Console.ReadLine();
             return true;
-        }
-    }
-
-    private void StartKeyPressListener()
-    {
-        Thread keyPressListener = new(ListenForKeyPress)
-        {
-            IsBackground = true
-        };
-        keyPressListener.Start();
-    }
-
-    private void ListenForKeyPress(object? obj)
-    {
-        while (isRunning)
-        {
-            var k = Console.ReadKey(true);
-            if (k.Key == ConsoleKey.Escape)
-            {
-                isRunning = false;
-            }
         }
     }
 }

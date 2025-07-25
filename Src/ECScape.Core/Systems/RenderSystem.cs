@@ -4,7 +4,7 @@ using ECScape.Core.Entities;
 
 namespace ECScape.Core.Systems;
 
-internal sealed class RenderSystem : ISystem
+public sealed class RenderSystem : ISystem
 {
     private readonly Entry[,] frontBuffer;
     private readonly Entry[,] backBuffer;
@@ -13,6 +13,7 @@ internal sealed class RenderSystem : ISystem
     {
         var width = UiInterface.TotalWidth;
         var height = UiInterface.TotalHeight;
+
         frontBuffer = new Entry[width, height];
         backBuffer = new Entry[width, height];
         for (var x = 0; x < width; x++)
