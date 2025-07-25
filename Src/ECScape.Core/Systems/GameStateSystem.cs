@@ -17,8 +17,8 @@ internal sealed class GameStateSystem : ISystem
 
     private static void CheckPlayerLose(Entity player)
     {
-        var playerSize = player.GetRequiredComponent<Size>();
-        if (playerSize.Width <= 0 || playerSize.Height <= 0)
+        var playerHealth = player.GetRequiredComponent<Health>();
+        if (playerHealth.Hearts <= 0)
         {
             throw new GameOverException();
         }

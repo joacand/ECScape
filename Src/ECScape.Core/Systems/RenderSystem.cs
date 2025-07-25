@@ -37,7 +37,7 @@ public sealed class RenderSystem : ISystem
         }
 
         world.Entities
-            .Where(x => x.HasComponent<Position>() && x.HasComponent<Drawable>()).ToList()
+            .Where(x => x.HasComponent<Position>() && x.HasComponent<Drawable>() && x.HasComponent<Exists>()).ToList()
             .ForEach(Draw);
 
         DrawInterface(world.GetEntityWith(typeof(Statistics)));
@@ -69,10 +69,15 @@ public sealed class RenderSystem : ISystem
 
     private void DrawInterface(Entity? playerEntity)
     {
-        var score = playerEntity?.GetComponent<Statistics>()?.Score ?? 0;
-        var gameTitle = $"  ECScape  ▧▧▧  Score: {score}  ";
+        var gameTitle = $"  ECScape  ";
         var titleIndex = 0;
-
+        if (playerEntity != null)
+        {
+            var score = playerEntity?.GetComponent<Statistics>()?.Score ?? 0;
+            var hearts = new string('♥', playerEntity?.GetRequiredComponent<Health>().Hearts ?? 0);
+            if (string.IsNullOrWhiteSpace(hearts)) { hearts = "☠"; }
+            gameTitle = $"  ECScape  ▧▧▧  Health: {hearts}  ▧▧▧  Score: {score}  ";
+        }
         for (var i = 0; i < UiInterface.TotalWidth; i++)
         {
             for (var j = UiInterface.InterfaceStart; j < UiInterface.InterfaceEnd; j++)

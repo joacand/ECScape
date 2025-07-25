@@ -30,6 +30,8 @@ internal sealed class DamageSystem : ISystem
 
         if (IsColliding(position, size, playerPosition, playerSize) && IsVulnerable(invulerable))
         {
+            var playerHealth = player.GetRequiredComponent<Health>();
+            playerHealth.Hearts -= damageComponent.DamageAmount;
             player.AddComponent(new Invulnerable
             {
                 ExpirationTime = DateTime.Now.AddSeconds(damageComponent.DamageInterval.TotalSeconds)
@@ -37,6 +39,8 @@ internal sealed class DamageSystem : ISystem
             var damage = damageComponent.DamageAmount;
             playerSize.Width -= damage;
             playerSize.Height -= damage;
+            if (playerSize.Width <= 0) { playerSize.Width = 1; }
+            if (playerSize.Height <= 0) { playerSize.Height = 1; }
         }
     }
 
@@ -55,13 +59,17 @@ internal sealed class DamageSystem : ISystem
 
         if (IsColliding(position, size, playerPosition, playerSize) && IsVulnerable(invulerable))
         {
+            var health = entity.GetRequiredComponent<Health>();
             entity.AddComponent(new Invulnerable
             {
                 ExpirationTime = DateTime.Now.AddSeconds(collectableComponent.CollectInterval.TotalSeconds)
             });
+            health.Hearts -= 1;
             size.Width -= 1;
             size.Height -= 1;
-            if (size.Width <= 0 || size.Height <= 0)
+            if (size.Width <= 0) { size.Width = 1; }
+            if (size.Height <= 0) { size.Height = 1; }
+            if (health.Hearts <= 0)
             {
                 entity.RemoveComponent<Exists>();
             }

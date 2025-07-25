@@ -11,6 +11,7 @@ internal static class EntityFactory
     {
         return Create(world, [
             new Exists(),
+            new Health(),
             new AffectedByGravity(),
             new LimitedByBounds(),
             new Position(left, top),
@@ -41,10 +42,11 @@ internal static class EntityFactory
         ]);
     }
 
-    public static Entity CreateCollectable(World world, double left, double top, char symbol, int width, int height)
+    public static Entity CreateCollectable(World world, double left, double top, char symbol, int width, int height, int hearts)
     {
         return Create(world, [
             new Exists(),
+            new Health { Hearts = hearts },
             new AffectedByGravity(),
             new LimitedByBounds(),
             new Position(left, top),
