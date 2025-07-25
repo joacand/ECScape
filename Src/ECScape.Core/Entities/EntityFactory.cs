@@ -17,6 +17,7 @@ internal static class EntityFactory
             new Size(3, 3),
             new Velocity(),
             new PlayerControllable(),
+            new Statistics(),
             new Invulnerable
             {
                 ExpirationTime = DateTime.Now.AddSeconds(3)

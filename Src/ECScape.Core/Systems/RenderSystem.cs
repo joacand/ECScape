@@ -40,7 +40,7 @@ public sealed class RenderSystem : ISystem
             .Where(x => x.HasComponent<Position>() && x.HasComponent<Drawable>()).ToList()
             .ForEach(Draw);
 
-        DrawInterface();
+        DrawInterface(world.GetEntityWith(typeof(Statistics)));
 
         Render();
     }
@@ -67,19 +67,19 @@ public sealed class RenderSystem : ISystem
         }
     }
 
-    private void DrawInterface()
+    private void DrawInterface(Entity? playerEntity)
     {
-        const string GameTitle = "  ECSape  ";
+        var score = playerEntity?.GetComponent<Statistics>()?.Score ?? 0;
+        var gameTitle = $"  ECSape  ▧▧▧  Score: {score}  ";
         var titleIndex = 0;
 
-        // Background
         for (var i = 0; i < UiInterface.TotalWidth; i++)
         {
             for (var j = UiInterface.InterfaceStart; j < UiInterface.InterfaceEnd; j++)
             {
-                if (i > 3 && j == 1 && titleIndex < GameTitle.Length)
+                if (i > 3 && j == 1 && titleIndex < gameTitle.Length)
                 {
-                    var c = GameTitle[titleIndex++];
+                    var c = gameTitle[titleIndex++];
                     backBuffer[i, j] = new(c, ConsoleColor.Cyan);
                 }
                 else

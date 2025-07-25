@@ -61,6 +61,8 @@ internal sealed class DamageSystem : ISystem
             });
             size.Width -= 1;
             size.Height -= 1;
+            var statistics = player.GetRequiredComponent<Statistics>();
+            statistics.Score += collectableComponent.ScoreAmount;
         }
     }
 

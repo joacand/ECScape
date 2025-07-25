@@ -10,6 +10,21 @@ internal sealed partial class InputSystem : Core.Systems.InputSystem
     [LibraryImport("user32.dll")]
     internal static partial short GetAsyncKeyState(int vKey);
 
+    public InputSystem()
+    {
+        Thread keyPressListener = new(EatKeyPresses) { IsBackground = true };
+        keyPressListener.Start();
+    }
+
+    /// <summary>
+    /// Used to avoid the console from displaying key presses.
+    /// </summary>
+    private void EatKeyPresses(object? obj)
+    {
+        while (true) { _ = Console.ReadKey(true); }
+    }
+
+
     private static bool IsKeyDown(ConsoleKey key)
     {
         return (GetAsyncKeyState((int)key) & 0x8000) != 0;
