@@ -1,6 +1,6 @@
 ﻿namespace ECScape.Core.Components;
 
-internal class Statistics : IComponent
+internal sealed class Statistics : IComponent
 {
     public int Score { get; set; }
 }

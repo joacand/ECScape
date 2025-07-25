@@ -11,7 +11,7 @@ public sealed class Game(InputSystem inputSystem)
     public void InitializeLoop()
     {
         Seeder.Seed(world);
-        world.Systems.AddRange(inputSystem, new NpcSystem(), new PhysicsSystem(), new DamageSystem(), new RenderSystem(), new GameStateSystem());
+        world.Systems.AddRange(inputSystem, new NpcSystem(), new PhysicsSystem(), new DamageSystem(), new SpawnerSystem(), new RenderSystem(), new GameStateSystem());
 
         Loop();
     }
@@ -58,12 +58,6 @@ public sealed class Game(InputSystem inputSystem)
         catch (GameOverException)
         {
             Console.WriteLine("Game over. Press any key to restart.");
-            Console.ReadLine();
-            return true;
-        }
-        catch (GameWinException)
-        {
-            Console.WriteLine("You win! Press any key to restart.");
             Console.ReadLine();
             return true;
         }

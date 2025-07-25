@@ -12,9 +12,6 @@ internal static class Seeder
         EntityFactory.CreateEnemy(world, 30, 0, '%', 3, 1);
         EntityFactory.CreateEnemy(world, 10, 0, '#', 2, 1);
 
-        EntityFactory.CreateCollectable(world, 25, 10, '$', 3, 4);
-        EntityFactory.CreateCollectable(world, 50, 10, '♥', 2, 2);
-
         // Ground blocks
         for (var i = 0; i < 3; i++)
         {

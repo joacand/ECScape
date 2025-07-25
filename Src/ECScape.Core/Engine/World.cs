@@ -5,6 +5,8 @@ namespace ECScape.Core.Engine;
 
 public sealed class World
 {
+    public static Random Random { get; } = new();
+
     public List<Entity> Entities { get; } = [];
     public List<ISystem> Systems { get; } = [];
 

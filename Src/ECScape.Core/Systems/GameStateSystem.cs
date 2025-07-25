@@ -13,7 +13,6 @@ internal sealed class GameStateSystem : ISystem
         if (player == null) { return; }
 
         CheckPlayerLose(player);
-        CheckPlayerWin(world.Entities);
     }
 
     private static void CheckPlayerLose(Entity player)
@@ -22,14 +21,6 @@ internal sealed class GameStateSystem : ISystem
         if (playerSize.Width <= 0 || playerSize.Height <= 0)
         {
             throw new GameOverException();
-        }
-    }
-
-    private static void CheckPlayerWin(List<Entity> entities)
-    {
-        if (!entities.Where(x => x.HasComponent<Collectable>()).Any(entity => entity.GetRequiredComponent<Size>().Width > 0))
-        {
-            throw new GameWinException();
         }
     }
 }

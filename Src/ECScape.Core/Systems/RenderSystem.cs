@@ -70,7 +70,7 @@ public sealed class RenderSystem : ISystem
     private void DrawInterface(Entity? playerEntity)
     {
         var score = playerEntity?.GetComponent<Statistics>()?.Score ?? 0;
-        var gameTitle = $"  ECSape  ▧▧▧  Score: {score}  ";
+        var gameTitle = $"  ECScape  ▧▧▧  Score: {score}  ";
         var titleIndex = 0;
 
         for (var i = 0; i < UiInterface.TotalWidth; i++)

@@ -10,6 +10,7 @@ internal static class EntityFactory
     public static Entity CreatePlayer(World world, double left, double top)
     {
         return Create(world, [
+            new Exists(),
             new AffectedByGravity(),
             new LimitedByBounds(),
             new Position(left, top),
@@ -28,6 +29,7 @@ internal static class EntityFactory
     public static Entity CreateEnemy(World world, double left, double top, char symbol, int width, int height)
     {
         return Create(world, [
+            new Exists(),
             new AffectedByGravity(),
             new LimitedByBounds(),
             new Position(left, top),
@@ -42,6 +44,7 @@ internal static class EntityFactory
     public static Entity CreateCollectable(World world, double left, double top, char symbol, int width, int height)
     {
         return Create(world, [
+            new Exists(),
             new AffectedByGravity(),
             new LimitedByBounds(),
             new Position(left, top),
@@ -60,6 +63,7 @@ internal static class EntityFactory
     public static Entity CreateGroundBlock(World world, int left, int top)
     {
         return Create(world, [
+            new Exists(),
             new Position(left, top),
             new Drawable { Symbol = '=', Color = ConsoleColor.Gray },
             new Size(1, 1),
@@ -71,6 +75,7 @@ internal static class EntityFactory
     public static Entity CreateCloudBlock(World world, int left, int top)
     {
         return Create(world, [
+            new Exists(),
             new Position(left, top),
             new Drawable { Symbol = '=', Color = ConsoleColor.Magenta },
             new Size(1, 1),

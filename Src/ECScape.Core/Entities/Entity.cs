@@ -26,6 +26,11 @@ public record Entity
         Components[component.GetType()] = component;
     }
 
+    public void RemoveComponent<T>() where T : IComponent
+    {
+        Components.Remove(typeof(T));
+    }
+
     public bool HasComponent<T>() where T : class, IComponent
     {
         return Components.ContainsKey(typeof(T));

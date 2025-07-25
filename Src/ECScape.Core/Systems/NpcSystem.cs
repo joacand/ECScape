@@ -7,8 +7,6 @@ namespace ECScape.Core.Systems;
 
 internal sealed class NpcSystem : ISystem
 {
-    private static readonly Random random = new();
-
     private readonly ConcurrentDictionary<Entity, DateTime> lastUpdateTimes = new();
     private static readonly TimeSpan updateInterval = TimeSpan.FromMilliseconds(500);
 
@@ -33,8 +31,8 @@ internal sealed class NpcSystem : ISystem
         var velocity = entity.GetRequiredComponent<Velocity>();
 
         lastUpdateTimes[entity] = DateTime.Now;
-        var horizontal = random.Next(-200, 200);
-        var vertical = random.Next(-10, 200);
+        var horizontal = World.Random.Next(-200, 200);
+        var vertical = World.Random.Next(-10, 200);
         vertical = Math.Abs(vertical) < 2 ? 0 : vertical;
 
         velocity.Y = vertical;
