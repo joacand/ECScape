@@ -17,6 +17,10 @@ internal static class EntityFactory
             new Size(3, 3),
             new Velocity(),
             new PlayerControllable(),
+            new Invulnerable
+            {
+                ExpirationTime = DateTime.Now.AddSeconds(3)
+            },
         ]);
     }
 
@@ -44,7 +48,11 @@ internal static class EntityFactory
             new Drawable { Symbol = symbol, Color = ConsoleColor.Yellow },
             new Size(width, height),
             new Velocity(),
-            new Collectable()
+            new Collectable(),
+            new Invulnerable
+            {
+                ExpirationTime = DateTime.Now.AddSeconds(3)
+            },
         ]);
     }
 
