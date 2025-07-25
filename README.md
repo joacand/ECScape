@@ -14,6 +14,6 @@ This project was created to:
 
 ## Gameplay
 
-🖼️ Evidently, stunning graphics weren’t the goal with the project.
+🖼️ Evidently, stunning graphics isn't the primary goal of the project.
 
 ![Gameplay](./Examples/gameplay.gif)
