@@ -27,8 +27,12 @@ internal sealed class GameTimer
         var frameEndTimeMs = stopwatch.ElapsedMilliseconds;
         var frameProcessingTimeMs = frameEndTimeMs - lastFrameTimeMs;
         var sleepTimeMs = TargetFrameTimeMs - frameProcessingTimeMs;
+        if (sleepTimeMs < 1)
+        {
+            sleepTimeMs = 1;
+        }
 
-        if (sleepTimeMs > 1)
+        if (sleepTimeMs >= 1)
         {
             await Task.Delay((int)sleepTimeMs);
         }

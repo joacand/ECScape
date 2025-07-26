@@ -1,0 +1,37 @@
+﻿@page "/"
+@inject GameEngineHost GameHost
+
+<PageTitle>Home</PageTitle>
+
+<h3>ECScape Web</h3>
+
+<div tabindex="0" @onkeydown="HandleKeyDown" style="outline:none;">
+    <table style="border-collapse: collapse;">
+        @for (int y = 0; y < GameHost.Height; y++)
+        {
+            <tr>
+                @for (int x = 0; x < GameHost.Width; x++)
+                {
+                    var entry = GameHost.GetBufferEntry(x, y);
+                    <td style="width:10px; height:10px; background-color:@entry.BgColor; color:@entry.FgColor; text-align:center; font-family:monospace;">
+                        @entry.Symbol
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        GameHost.StartAsync(() => InvokeAsync(StateHasChanged));
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "w") GameHost.Jump();
+        else if (e.Key == "a") GameHost.MoveLeft();
+        else if (e.Key == "d") GameHost.MoveRight();
+    }
+}
