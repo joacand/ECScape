@@ -22,7 +22,7 @@ internal sealed class GameTimer
         lastFrameTimeMs = currentTimeMs;
     }
 
-    public void LimitFrameRate()
+    public async Task LimitFrameRate()
     {
         var frameEndTimeMs = stopwatch.ElapsedMilliseconds;
         var frameProcessingTimeMs = frameEndTimeMs - lastFrameTimeMs;
@@ -30,7 +30,7 @@ internal sealed class GameTimer
 
         if (sleepTimeMs > 1)
         {
-            Thread.Sleep((int)sleepTimeMs);
+            await Task.Delay((int)sleepTimeMs);
         }
     }
 }

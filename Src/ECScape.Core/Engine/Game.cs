@@ -7,26 +7,17 @@ public sealed class Game(InputSystem inputSystem, IOutputRenderer outputRenderer
     private readonly World world = new();
     private readonly GameTimer gameTimer = new();
 
-    public void InitializeLoop()
+    public async Task InitializeLoop(CancellationToken cancellationToken, Func<Task>? refreshUi = null)
     {
         Seeder.Seed(world);
         world.Systems.AddRange(inputSystem, new NpcSystem(), new PhysicsSystem(), new DamageSystem(), new SpawnerSystem(), new RenderSystem(outputRenderer), new GameStateSystem());
 
-        Loop();
-    }
-
-    public void Loop()
-    {
-        while (true)
+        while (!cancellationToken.IsCancellationRequested)
         {
-            GameLoop();
+            gameTimer.Update();
+            world.Draw(gameTimer.DeltaTime);
+            refreshUi?.Invoke();
+            await gameTimer.LimitFrameRate();
         }
-    }
-
-    private void GameLoop()
-    {
-        gameTimer.Update();
-        world.Draw(gameTimer.DeltaTime);
-        gameTimer.LimitFrameRate();
     }
 }

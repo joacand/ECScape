@@ -8,7 +8,13 @@ namespace ECScape.Terminal;
 
 internal class Program
 {
-    static void Main(string[] _)
+    private static void Main(string[] _)
+    {
+        var gameTask = Run();
+        gameTask.Wait();
+    }
+
+    private static async Task Run()
     {
         UiInterface.SetBounds(Console.WindowWidth, Console.WindowHeight);
 
@@ -22,9 +28,10 @@ internal class Program
         ILogger logger = loggerFactory.CreateLogger<Program>();
         Log.SetLogger(logger);
 
-        var running = true;
+        CancellationTokenSource cancellationTokenSource = new();
+        var cancellationToken = cancellationTokenSource.Token;
 
-        while (running)
+        while (!cancellationToken.IsCancellationRequested)
         {
             Console.CursorVisible = false;
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -35,7 +42,7 @@ internal class Program
             try
             {
                 Game game = new(new InputSystem(), new Writer());
-                game.InitializeLoop();
+                await game.InitializeLoop(cancellationToken);
             }
             catch (GameOverException)
             {
@@ -47,7 +54,7 @@ internal class Program
                 Console.WriteLine($"An unexpected error occurred: {ex}");
                 Console.WriteLine("Press any key to exit.");
                 Console.ReadKey();
-                running = false;
+                cancellationTokenSource.Cancel();
             }
         }
     }
