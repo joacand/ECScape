@@ -1,3 +1,3 @@
 ﻿namespace ECScape.Core.Exceptions;
 
-internal class GameOverException : Exception;
+public class GameOverException : Exception;

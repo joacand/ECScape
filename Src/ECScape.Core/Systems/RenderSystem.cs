@@ -6,11 +6,13 @@ namespace ECScape.Core.Systems;
 
 public sealed class RenderSystem : ISystem
 {
+    private readonly IOutputRenderer outputRenderer;
     private readonly Entry[,] frontBuffer;
     private readonly Entry[,] backBuffer;
 
-    public RenderSystem()
+    public RenderSystem(IOutputRenderer outputRenderer)
     {
+        this.outputRenderer = outputRenderer;
         var width = UiInterface.TotalWidth;
         var height = UiInterface.TotalHeight;
 
@@ -103,7 +105,7 @@ public sealed class RenderSystem : ISystem
             {
                 if (frontBuffer[x, y] != backBuffer[x, y])
                 {
-                    Writer.Write(backBuffer[x, y].Symbol, backBuffer[x, y].Color, new Position(x, y));
+                    outputRenderer.Write(backBuffer[x, y].Symbol, backBuffer[x, y].Color, new Position(x, y));
                     frontBuffer[x, y] = backBuffer[x, y];
                 }
             }

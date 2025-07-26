@@ -2,5 +2,5 @@
 
 internal sealed class Health : IComponent
 {
-    public int Hearts { get; set; } = 4;
+    public int Hearts { get; set; } = 3;
 }

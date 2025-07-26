@@ -1,6 +1,6 @@
 ﻿namespace ECScape.Core.Components;
 
-internal sealed class Position(double left, double top) : IComponent
+public sealed class Position(double left, double top) : IComponent
 {
     public double Left { get; set; } = left;
     public double Top { get; set; } = top;

@@ -1,20 +1,16 @@
-﻿using ECScape.Core.Components;
+﻿using ECScape.Core;
+using ECScape.Core.Components;
 
-namespace ECScape.Core.Engine;
+namespace ECScape.Terminal;
 
-internal static class Writer
+internal class Writer : IOutputRenderer
 {
-    public static void Write(char character, ConsoleColor color, Position position)
+    public void Write(char character, ConsoleColor color, Position position)
     {
-        Write(character.ToString(), color, position);
+        WriteInternal(character.ToString(), color, position, Console.Write);
     }
 
-    public static void Write(string message, ConsoleColor color, Position position)
-    {
-        WriteLineInt(message, color, position, Console.Write);
-    }
-
-    private static void WriteLineInt(string message, ConsoleColor color, Position position, Action<string> writeAction)
+    private static void WriteInternal(string message, ConsoleColor color, Position position, Action<string> writeAction)
     {
         if (position.Left < 0 || position.Top < 0)
         {
