@@ -42,6 +42,32 @@ internal static class EntityFactory
         ]);
     }
 
+    public static Entity CreateMeteoroid(World world, double left, int width, int height)
+    {
+        return Create(world, [
+            new Exists(),
+            new AffectedByGravity(),
+            new Position(left, UiInterface.WorldTop),
+            new Drawable { Symbol = '★', Color = ConsoleColor.DarkRed },
+            new Size(width, height),
+            new Velocity(){ X = World.Random.Next(-2,2), Y = 5 },
+            new DamagesPlayer { DamageAmount = 1 }
+        ]);
+    }
+
+    public static Entity CreatePowerUp(World world, double left, int width, int height)
+    {
+        return Create(world, [
+            new Exists(),
+            new AffectedByGravity() { Gravity = 3 },
+            new PowerUpHealth(),
+            new Position(left, UiInterface.WorldTop),
+            new Drawable { Symbol = '+', Color = ConsoleColor.Cyan },
+            new Size(width, height),
+            new Velocity() { X = World.Random.Next(-2,2), Y = 0 }
+        ]);
+    }
+
     public static Entity CreateCollectable(World world, double left, double top, char symbol, int width, int height, int hearts)
     {
         return Create(world, [
