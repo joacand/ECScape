@@ -29,7 +29,7 @@
     }
 
     drawCharacter(x, y, char, color) {
-        this.ctx.fillStyle = '#000000';
+        this.ctx.fillStyle = '#00008B';
         this.ctx.fillRect(x * this.cellWidth, y * this.cellHeight, this.cellWidth, this.cellHeight);
 
         this.ctx.fillStyle = color;
@@ -41,18 +41,25 @@
     }
 
     clear() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = '#00008B'
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
 
 let renderer;
 
-function initialize(dotNetRef, canvasId, width, height) {
+function initialize(canvasId, width, height) {
     renderer = new CanvasRenderer(canvasId, width, height);
 }
 
 function drawCharacter(x, y, char, color) {
     if (renderer) {
         renderer.drawCharacter(x, y, char, color);
+    }
+}
+
+function clear() {
+    if (renderer) {
+        renderer.clear();
     }
 }

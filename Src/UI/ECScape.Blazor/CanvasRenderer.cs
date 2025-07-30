@@ -4,25 +4,20 @@ using Microsoft.JSInterop;
 
 namespace ECScape.Blazor;
 
-public class CanvasRenderer : IOutputRenderer, IDisposable
+public sealed class CanvasRenderer(IJSRuntime jsRuntime, int width, int height) : IOutputRenderer
 {
-    private readonly IJSRuntime _jsRuntime;
-    private readonly int _width;
-    private readonly int _height;
-    private DotNetObjectReference<CanvasRenderer>? _dotNetRef;
-
-    public CanvasRenderer(IJSRuntime jsRuntime, int width, int height)
-    {
-        _jsRuntime = jsRuntime;
-        _width = width;
-        _height = height;
-        _dotNetRef = DotNetObjectReference.Create(this);
-    }
+    private readonly IJSRuntime _jsRuntime = jsRuntime;
+    private readonly int _width = width;
+    private readonly int _height = height;
 
     public async Task Initialize(string canvasId)
     {
-        await _jsRuntime.InvokeVoidAsync("initialize",
-            _dotNetRef, canvasId, _width, _height);
+        await _jsRuntime.InvokeVoidAsync("initialize", canvasId, _width, _height);
+    }
+
+    public void Clear()
+    {
+        _ = _jsRuntime.InvokeVoidAsync("clear");
     }
 
     public void Write(char character, ConsoleColor color, Position position)
@@ -41,12 +36,6 @@ public class CanvasRenderer : IOutputRenderer, IDisposable
             _ => "#FFFFFF"
         };
 
-        _ = _jsRuntime.InvokeVoidAsync("drawCharacter",
-            position.LeftInt, position.TopInt, character.ToString(), colorStr);
-    }
-
-    public void Dispose()
-    {
-        _dotNetRef?.Dispose();
+        _ = _jsRuntime.InvokeVoidAsync("drawCharacter", position.LeftInt, position.TopInt, character.ToString(), colorStr);
     }
 }

@@ -1,46 +1,31 @@
 ﻿using ECScape.Core.Engine;
-using ECScape.Core.Exceptions;
 using Microsoft.JSInterop;
 
 namespace ECScape.Blazor;
 
-public class GameEngineHost : IAsyncDisposable
+public class GameEngineHost
 {
-    private readonly CanvasRenderer _renderer;
-    private readonly Game _game;
-    private CancellationTokenSource? _cts;
-
-    public int Width => UiInterface.TotalWidth;
-    public int Height => UiInterface.TotalHeight;
+    private CanvasRenderer Renderer { get; }
+    private InputSystem InputSystem { get; }
+    private Game Game { get; set; }
 
     public GameEngineHost(IJSRuntime jsRuntime, InputSystem inputSystem)
     {
+        InputSystem = inputSystem;
         UiInterface.SetBounds(120, 30);
-        _renderer = new CanvasRenderer(jsRuntime, Width, Height);
-        _game = new Game(inputSystem, _renderer);
+        Renderer = new CanvasRenderer(jsRuntime, UiInterface.TotalWidth, UiInterface.TotalHeight);
+        Game = new Game(inputSystem, Renderer);
     }
 
     public async Task InitializeAsync(string canvasId)
     {
-        await _renderer.Initialize(canvasId);
+        await Renderer.Initialize(canvasId);
     }
 
-    public async Task StartAsync()
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _cts = new CancellationTokenSource();
-        try
-        {
-            await _game.InitializeLoop(_cts.Token);
-        }
-        catch (GameOverException)
-        {
-            // Todo
-        }
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        _cts?.Cancel();
-        _renderer.Dispose();
+        Renderer.Clear();
+        Game = new Game(InputSystem, Renderer);
+        await Game.InitializeLoop(cancellationToken);
     }
 }
