@@ -1,0 +1,111 @@
+﻿@page "/"
+@using ECScape.Core.Exceptions
+@inject GameEngineHost GameHost
+@inject InputSystem InputSystem
+
+<PageTitle>ECScape</PageTitle>
+
+<h3>ECScape</h3>
+
+<div @onkeydown="HandleKeyDown"
+     @onkeyup="HandleKeyUp"
+     tabindex="0"
+     style="outline: none;">
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+    </div>
+    @if (!@GameActive)
+    {
+        <div class="gameover">
+            <h2 style="color: white">Game over! Press Enter to play again.</h2>
+            <p style="color: white">@GameOverText</p>
+        </div>
+    }
+</div>
+
+@code {
+    private string GameOverText = "";
+    private bool GameActive = true;
+    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private CancellationToken cancellationToken;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GameHost.InitializeAsync("gameCanvas");
+            await InitializeGame();
+        }
+    }
+
+    private async Task InitializeGame()
+    {
+        try
+        {
+            cancellationTokenSource = new();
+            cancellationToken = cancellationTokenSource.Token;
+            GameActive = true;
+            GameOverText = "";
+            StateHasChanged();
+            await GameHost.StartAsync(cancellationToken);
+        }
+        catch (GameOverException ex)
+        {
+            cancellationTokenSource.Cancel();
+            GameActive = false;
+            GameOverText = "You lost!";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            cancellationTokenSource.Cancel();
+            GameActive = false;
+            GameOverText = $"An unexpected error occurred: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "a":
+            case "A":
+                InputSystem.SetLeft(true);
+                break;
+            case "d":
+            case "D":
+                InputSystem.SetRight(true);
+                break;
+            case "w":
+            case "W":
+                InputSystem.SetJump(true);
+                break;
+            case "Enter":
+                if (GameActive == false)
+                {
+                    await InitializeGame();
+                }
+                break;
+        }
+    }
+
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "a":
+            case "A":
+                InputSystem.SetLeft(false);
+                break;
+            case "d":
+            case "D":
+                InputSystem.SetRight(false);
+                break;
+            case "w":
+            case "W":
+                InputSystem.SetJump(false);
+                break;
+        }
+    }
+}
