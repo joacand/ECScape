@@ -30,9 +30,8 @@ internal sealed class PhysicsSystem : ISystem
         if (entity.HasComponent<LimitedByBounds>())
         {
             LimitBounds(position, size);
+            LimitBySolidEntities(world, size, position, originalPosition);
         }
-
-        LimitBySolidEntities(world, size, position, originalPosition);
     }
 
     private static void LimitBounds(Position position, Size size)

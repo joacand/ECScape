@@ -9,10 +9,13 @@ internal sealed class DamageSystem : ISystem
     public void Update(World world, float _)
     {
         Parallel.ForEach(world.Entities
-            .Where(x => x.HasComponent<DamagesPlayer>() && x.HasComponent<Position>()), entity => Update(entity, world));
+            .Where(x => x.HasComponent<DamagesPlayer>() && x.HasComponent<Position>() && x.HasComponent<Exists>()), entity => Update(entity, world));
 
         Parallel.ForEach(world.Entities
-            .Where(x => x.HasComponent<Collectable>() && x.HasComponent<Position>()), entity => UpdateCollectibles(entity, world));
+            .Where(x => x.HasComponent<Collectable>() && x.HasComponent<Position>() && x.HasComponent<Exists>()), entity => UpdateCollectibles(entity, world));
+
+        Parallel.ForEach(world.Entities
+            .Where(x => x.HasComponent<PowerUpHealth>() && x.HasComponent<Position>() && x.HasComponent<Exists>()), entity => UpdatePowerUps(entity, world));
     }
 
     public static void Update(Entity entity, World world)
@@ -75,6 +78,31 @@ internal sealed class DamageSystem : ISystem
             }
             var statistics = player.GetRequiredComponent<Statistics>();
             statistics.Score += collectableComponent.ScoreAmount;
+        }
+    }
+
+    private void UpdatePowerUps(Entity entity, World world)
+    {
+        var position = entity.GetRequiredComponent<Position>();
+        var powerUpComponent = entity.GetRequiredComponent<PowerUpHealth>();
+        var size = entity.GetComponent<Size>() ?? new Size(1, 1);
+        var invulerable = entity.GetComponent<Invulnerable>();
+
+        var player = world.GetEntityWith(typeof(PlayerControllable), typeof(Position));
+        if (player == null) { return; }
+
+        var playerPosition = player.GetRequiredComponent<Position>();
+        var playerSize = player.GetComponent<Size>() ?? new Size(1, 1);
+
+        if (IsColliding(position, size, playerPosition, playerSize))
+        {
+            var playerHealth = player.GetRequiredComponent<Health>();
+            playerHealth.Hearts += 1;
+            playerSize.Width += 1;
+            playerSize.Height += 1;
+            entity.RemoveComponent<Exists>();
+            var statistics = player.GetRequiredComponent<Statistics>();
+            statistics.Score += 1;
         }
     }
 
