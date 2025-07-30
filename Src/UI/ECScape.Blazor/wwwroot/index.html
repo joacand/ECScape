@@ -5,7 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ECScape</title>
-    <base href="/" />
+
+    <script>
+        (function () {
+            var path = window.location.pathname.split('/').filter(Boolean);
+            var repoName = path.length > 1 ? '/' + path[1] + '/' : '/';
+            document.write('<base href="' + repoName + '" />');
+        })();
+    </script>
+
     <link rel="stylesheet" href="css/app.css" />
 </head>
 
