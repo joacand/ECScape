@@ -23,11 +23,9 @@ internal class SpawnerSystem : ISystem
     private void SpawnMeteroid(World world)
     {
         if (DateTime.Now - LastMeteroid < MinTimeBetween) { return; }
-        if (DateTime.Now - LastMeteroidRoll < TimeBetweenRolls || World.Random.Next(0, 10) < 2)
-        {
-            LastMeteroidRoll = DateTime.Now;
-            return;
-        }
+        if (DateTime.Now - LastMeteroidRoll < TimeBetweenRolls) { return; }
+        LastMeteroidRoll = DateTime.Now;
+        if (World.Random.Next(0, 10) < 2) { return; }
         EntityFactory.CreateMeteoroid(world, World.Random.Next(0, UiInterface.WorldWidth + 1), 1, 1);
         LastMeteroid = DateTime.Now;
     }
@@ -35,11 +33,9 @@ internal class SpawnerSystem : ISystem
     private void SpawnPowerUp(World world)
     {
         if (DateTime.Now - LastPowerUp < MinTimeBetween) { return; }
-        if (DateTime.Now - LastPowerUpRoll < TimeBetweenRolls || World.Random.Next(0, 10) < 3)
-        {
-            LastPowerUpRoll = DateTime.Now;
-            return;
-        }
+        if (DateTime.Now - LastPowerUpRoll < TimeBetweenRolls) { return; }
+        LastPowerUpRoll = DateTime.Now;
+        if (World.Random.Next(0, 10) < 3) { return; }
         EntityFactory.CreatePowerUp(world, World.Random.Next(0, UiInterface.WorldWidth + 1), 1, 1);
         LastPowerUp = DateTime.Now;
     }

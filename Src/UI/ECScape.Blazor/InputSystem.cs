@@ -6,49 +6,13 @@ namespace ECScape.Blazor;
 
 public class InputSystem : Core.Systems.InputSystem
 {
-    public bool LeftPressed { get; set; }
-    public bool RightPressed { get; set; }
-    public bool JumpPressed { get; set; }
+    public bool LeftPressed { get;private set; }
+    public bool RightPressed { get; private set; }
+    public bool JumpPressed { get; private set; }
 
     public void SetLeft(bool pressed) => LeftPressed = pressed;
     public void SetRight(bool pressed) => RightPressed = pressed;
     public void SetJump(bool pressed) => JumpPressed = pressed;
-
-    //[JSInvokable]
-    //public void OnKeyDown(string key)
-    //{
-    //    switch (key)
-    //    {
-    //        case "ArrowLeft":
-    //            LeftPressed = true;
-    //            break;
-    //        case "ArrowRight":
-    //            RightPressed = true;
-    //            break;
-    //        case "ArrowUp":
-    //        case " ":
-    //            JumpPressed = true;
-    //            break;
-    //    }
-    //}
-
-    //[JSInvokable]
-    //public void OnKeyUp(string key)
-    //{
-    //    switch (key)
-    //    {
-    //        case "ArrowLeft":
-    //            LeftPressed = false;
-    //            break;
-    //        case "ArrowRight":
-    //            RightPressed = false;
-    //            break;
-    //        case "ArrowUp":
-    //        case " ":
-    //            JumpPressed = false;
-    //            break;
-    //    }
-    //}
 
     public override void Update(World world, float deltaTime)
     {
@@ -71,6 +35,6 @@ public class InputSystem : Core.Systems.InputSystem
         }
 
         // Reset inputs for next frame
-        LeftPressed = RightPressed = JumpPressed = false;
+        //LeftPressed = RightPressed = JumpPressed = false;
     }
 }
