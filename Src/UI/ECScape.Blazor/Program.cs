@@ -12,7 +12,8 @@ public class Program
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-        builder.Services.AddSingleton<GameEngineHost>();
+        builder.Services.AddScoped<GameEngineHost>();
+        builder.Services.AddSingleton<InputSystem>();
 
         await builder.Build().RunAsync();
     }

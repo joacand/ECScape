@@ -1,37 +1,64 @@
 ﻿@page "/"
 @inject GameEngineHost GameHost
+@inject InputSystem InputSystem
 
 <PageTitle>Home</PageTitle>
 
 <h3>ECScape Web</h3>
 
-<div tabindex="0" @onkeydown="HandleKeyDown" style="outline:none;">
-    <table style="border-collapse: collapse;">
-        @for (int y = 0; y < GameHost.Height; y++)
-        {
-            <tr>
-                @for (int x = 0; x < GameHost.Width; x++)
-                {
-                    var entry = GameHost.GetBufferEntry(x, y);
-                    <td style="width:10px; height:10px; background-color:@entry.BgColor; color:@entry.FgColor; text-align:center; font-family:monospace;">
-                        @entry.Symbol
-                    </td>
-                }
-            </tr>
-        }
-    </table>
+<div @onkeydown="HandleKeyDown"
+     @onkeyup="HandleKeyUp"
+     tabindex="0"
+     style="outline: none;">
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+    </div>
 </div>
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        GameHost.StartAsync(() => InvokeAsync(StateHasChanged));
+        if (firstRender)
+        {
+            await GameHost.InitializeAsync("gameCanvas");
+            await GameHost.StartAsync();
+        }
     }
 
     private void HandleKeyDown(KeyboardEventArgs e)
     {
-        if (e.Key == "w") GameHost.Jump();
-        else if (e.Key == "a") GameHost.MoveLeft();
-        else if (e.Key == "d") GameHost.MoveRight();
+        switch (e.Key)
+        {
+            case "ArrowLeft":
+                InputSystem.SetLeft(true);
+                break;
+            case "ArrowRight":
+                InputSystem.SetRight(true);
+                break;
+            case "ArrowUp":
+                InputSystem.SetJump(true);
+                break;
+        }
+    }
+
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "ArrowLeft":
+                InputSystem.SetLeft(false);
+                break;
+            case "ArrowRight":
+                InputSystem.SetRight(false);
+                break;
+            case "ArrowUp":
+                InputSystem.SetJump(false);
+                break;
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await GameHost.DisposeAsync();
     }
 }
