@@ -12,22 +12,7 @@ internal static class Seeder
         EntityFactory.CreateEnemy(world, 30, 0, '%', 3, 1);
         EntityFactory.CreateEnemy(world, 10, 0, '#', 2, 1);
 
-        // Ground blocks
-        for (var i = 0; i < 3; i++)
-        {
-            for (var j = 0; j < UiInterface.WorldWidth; j++)
-            {
-                EntityFactory.CreateGroundBlock(world, j, UiInterface.WorldBottom - i);
-            }
-        }
-
-        // Cloud blocks
-        for (var i = 0; i < 3; i++)
-        {
-            for (var j = 0; j < 3; j++)
-            {
-                EntityFactory.CreateCloudBlock(world, 20 - j, 20 - i);
-            }
-        }
+        EntityFactory.CreateGroundBlock(world, 0, UiInterface.WorldBottom - 2, UiInterface.WorldWidth, 3);
+        EntityFactory.CreateCloudBlock(world, 20, 15, 3, 3);
     }
 }

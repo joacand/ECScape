@@ -88,25 +88,25 @@ internal static class EntityFactory
         ]);
     }
 
-    public static Entity CreateGroundBlock(World world, int left, int top)
+    public static Entity CreateGroundBlock(World world, int left, int top, int width, int height)
     {
         return Create(world, [
             new Exists(),
             new Position(left, top),
             new Drawable { Symbol = '=', Color = ConsoleColor.Gray },
-            new Size(1, 1),
+            new Size(width, height),
             new LimitedByBounds(),
             new Solid()
         ]);
     }
 
-    public static Entity CreateCloudBlock(World world, int left, int top)
+    public static Entity CreateCloudBlock(World world, int left, int top, int width, int height)
     {
         return Create(world, [
             new Exists(),
             new Position(left, top),
             new Drawable { Symbol = '=', Color = ConsoleColor.Magenta },
-            new Size(1, 1),
+            new Size(width, height),
             new LimitedByBounds(),
             new Solid()
         ]);
