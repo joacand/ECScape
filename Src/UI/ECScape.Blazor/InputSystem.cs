@@ -1,6 +1,5 @@
 ﻿using ECScape.Core.Components;
 using ECScape.Core.Engine;
-using Microsoft.JSInterop;
 
 namespace ECScape.Blazor;
 
@@ -33,8 +32,5 @@ public class InputSystem : Core.Systems.InputSystem
         {
             velocity.Y = Configuration.PlayerMovementVertical;
         }
-
-        // Reset inputs for next frame
-        //LeftPressed = RightPressed = JumpPressed = false;
     }
 }

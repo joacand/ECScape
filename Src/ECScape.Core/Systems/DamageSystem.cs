@@ -108,10 +108,10 @@ internal sealed class DamageSystem : ISystem
 
     private static bool IsColliding(Position position, Size size, Position position2, Size size2)
     {
-        return position.LeftInt < position2.LeftInt + size2.Width &&
-               position.LeftInt + size.Width > position2.LeftInt &&
-               position.TopInt < position2.TopInt + size2.Height &&
-               position.TopInt + size.Height > position2.TopInt;
+        return position.Left < position2.Left + size2.Width &&
+               position.Left + size.Width > position2.Left &&
+               position.Top < position2.Top + size2.Height &&
+               position.Top + size.Height > position2.Top;
     }
 
     private static bool IsVulnerable(Invulnerable? invulerable)

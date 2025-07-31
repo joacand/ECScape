@@ -82,9 +82,9 @@ internal sealed class PhysicsSystem : ISystem
     private static bool IsBlocked(Position position, Size size, IEnumerable<Entity> solidPositions)
     {
         return solidPositions.Any(s =>
-            s.GetRequiredComponent<Position>().LeftInt < position.LeftInt + size.Width &&
-            s.GetRequiredComponent<Position>().LeftInt + s.GetRequiredComponent<Size>().Width > position.LeftInt &&
-            s.GetRequiredComponent<Position>().TopInt < position.TopInt + size.Height &&
-            s.GetRequiredComponent<Position>().TopInt + s.GetRequiredComponent<Size>().Height > position.TopInt);
+            s.GetRequiredComponent<Position>().Left < position.Left + size.Width &&
+            s.GetRequiredComponent<Position>().Left + s.GetRequiredComponent<Size>().Width > position.Left &&
+            s.GetRequiredComponent<Position>().Top < position.Top + size.Height &&
+            s.GetRequiredComponent<Position>().Top + s.GetRequiredComponent<Size>().Height > position.Top);
     }
 }

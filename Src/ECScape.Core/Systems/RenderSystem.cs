@@ -58,13 +58,10 @@ public sealed class RenderSystem : ISystem
             for (var y = 0; y < size.Height; y++)
             {
                 var newPos = new Position(position.Left + x, position.Top + y);
-                if (newPos.Left < 0 || newPos.Left >= backBuffer.GetLength(0) ||
-                    newPos.Top < 0 || newPos.Top >= backBuffer.GetLength(1))
+                if (!OutOfBounds(newPos))
                 {
-                    continue;
+                    backBuffer[newPos.LeftInt, newPos.TopInt] = new(drawable.Symbol, drawable.Color);
                 }
-
-                backBuffer[(int)newPos.Left, (int)newPos.Top] = new(drawable.Symbol, drawable.Color);
             }
         }
     }
@@ -111,6 +108,10 @@ public sealed class RenderSystem : ISystem
             }
         }
     }
+
+    private bool OutOfBounds(Position position) =>
+        position.LeftInt < 0 || position.LeftInt >= backBuffer.GetLength(0) ||
+        position.TopInt < 0 || position.TopInt >= backBuffer.GetLength(1);
 
     private readonly record struct Entry(char Symbol, ConsoleColor Color)
     {

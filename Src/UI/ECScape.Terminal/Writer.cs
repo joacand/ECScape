@@ -23,7 +23,7 @@ internal class Writer : IOutputRenderer
         var initialLeft = Console.CursorLeft;
         var initialTop = Console.CursorTop;
         var initialColor = Console.ForegroundColor;
-        Console.SetCursorPosition((int)position.Left, (int)position.Top);
+        Console.SetCursorPosition(position.LeftInt, position.TopInt); // Left/Top are always integers from the drawing system
         Console.ForegroundColor = color;
         writeAction(message);
         Console.SetCursorPosition(initialLeft, initialTop);

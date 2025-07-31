@@ -2,5 +2,5 @@
 
 internal sealed class Statistics : IComponent
 {
-    public int Score { get; set; }
+    public double Score { get; set; }
 }

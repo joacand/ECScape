@@ -1,7 +1,7 @@
 ﻿namespace ECScape.Core.Components;
 
-internal sealed class Size(int width, int height) : IComponent
+internal sealed class Size(double width, double height) : IComponent
 {
-    public int Width { get; set; } = width;
-    public int Height { get; set; } = height;
+    public double Width { get; set; } = width;
+    public double Height { get; set; } = height;
 }
