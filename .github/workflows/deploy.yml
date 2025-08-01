@@ -29,23 +29,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '9.0.x'
-
-    - name: Publish Blazor WASM
-      run: dotnet publish -c Release -o dist
-
-    - name: Add .nojekyll
-      run: touch dist/wwwroot/.nojekyll
-
-    - name: Set base href for GitHub Pages
-      run: |
-        sed -i 's|<base href="/"|<base href="/ECScape/"|' dist/wwwroot/index.html
+    - name: Add .nojekyll to bypass Jekyll processing
+      run: touch Web/.nojekyll
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: dist/wwwroot
+        publish_dir: Web
