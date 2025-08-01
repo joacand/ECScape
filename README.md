@@ -8,7 +8,7 @@ This project was created to:
 - Explore the ECS architectural pattern in a hands-on way
 - Experiment with real-time simulation in a .NET console
 
-## 🛠️ Requirements .NeT
+## 🛠️ Requirements .NET
 
 - [.NET 9](https://dotnet.microsoft.com/)  
 - Windows terminal (uses `user32.dll` for async key input)
