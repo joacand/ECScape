@@ -20,7 +20,7 @@ class Game {
     }
 
     async start() {
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const canvas = document.getElementById('gameCanvas');
             const gameOverDiv = document.getElementById('gameOver');
             const restartButton = document.getElementById('restartButton');
@@ -40,6 +40,11 @@ class Game {
             let cancellationToken = { isCancellationRequested: false };
 
             const runGame = async () => {
+                this.world = new World();
+                this.gameTimer = new GameTimer();
+                this.inputSystem = new InputSystem();
+                this.renderSystem = new RenderSystem(canvas);
+
                 gameOverDiv.style.display = 'none';
                 cancellationToken = { isCancellationRequested: false };
 
@@ -60,7 +65,7 @@ class Game {
                 setTimeout(runGame, 100);
             });
 
-            runGame();
+            await runGame();
         });
     }
 

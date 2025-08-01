@@ -28,9 +28,7 @@ class EntityFactory {
             new Velocity(),
             new PlayerControllable(),
             new Statistics(),
-            new Invulnerable({
-                ExpirationTime: Date.now() + 3000
-            }),
+            new Invulnerable(Date.now() + 3000),
         ]);
     }
 
@@ -90,9 +88,7 @@ class EntityFactory {
             new Size(width, height),
             new Velocity(),
             new Collectable(),
-            new Invulnerable({
-                ExpirationTime: Date.now() + 3000
-            }),
+            new Invulnerable(Date.now() + 3000),
         ]);
     }
 
