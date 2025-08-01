@@ -1,5 +1,5 @@
 import ISystem from './ISystem.js';
-import { Position, Size, DamagesPlayer, Collectable, PowerUpHealth, Invulnerable, Exists, PlayerControllable } from '../components/Components.js';
+import { Position, Size, DamagesPlayer, Collectable, PowerUpHealth, Invulnerable, Exists, PlayerControllable, Health, Statistics } from '../components/Components.js';
 
 class DamageSystem extends ISystem {
     update(world, deltaTime) {
@@ -23,9 +23,7 @@ class DamageSystem extends ISystem {
         if (this.isColliding(position, size, playerPosition, playerSize) && this.isVulnerable(invulnerable)) {
             const playerHealth = player.getRequiredComponent(Health);
             playerHealth.Hearts -= damageComponent.DamageAmount;
-            player.addComponent(new Invulnerable({
-                ExpirationTime: Date.now() + damageComponent.DamageInterval
-            }));
+            player.addComponent(new Invulnerable(Date.now() + damageComponent.DamageInterval));
 
             const damage = damageComponent.DamageAmount;
             playerSize.Width -= damage;
@@ -49,9 +47,7 @@ class DamageSystem extends ISystem {
 
         if (this.isColliding(position, size, playerPosition, playerSize) && this.isVulnerable(invulnerable)) {
             const health = entity.getRequiredComponent(Health);
-            entity.addComponent(new Invulnerable({
-                ExpirationTime: Date.now() + collectableComponent.CollectInterval
-            }));
+            entity.addComponent(new Invulnerable(Date.now() + collectableComponent.CollectInterval));
             health.Hearts -= 1;
             size.Width -= 1;
             size.Height -= 1;
