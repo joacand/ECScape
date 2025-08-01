@@ -42,7 +42,9 @@ internal class Program
             try
             {
                 Game game = new(new InputSystem(), new Writer());
-                await game.InitializeLoop(cancellationToken);
+                var world = game.InitializeLoop();
+                Seeder.Seed(world);
+                await game.RunLoop(cancellationToken);
             }
             catch (GameOverException)
             {

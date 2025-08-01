@@ -12,13 +12,10 @@ internal class Writer : IOutputRenderer
 
     private static void WriteInternal(string message, ConsoleColor color, Position position, Action<string> writeAction)
     {
-        if (position.Left < 0 || position.Top < 0)
+        if (position.Left < 0 || position.Top < 0 ||
+            position.Left >= Console.WindowWidth || position.Top >= Console.WindowHeight)
         {
-            throw new Exception("Left and top must be non-negative.");
-        }
-        if (position.Left >= Console.WindowWidth || position.Top >= Console.WindowHeight)
-        {
-            throw new Exception("Left and top must be within the console window dimensions.");
+            return;
         }
         var initialLeft = Console.CursorLeft;
         var initialTop = Console.CursorTop;

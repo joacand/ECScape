@@ -26,6 +26,8 @@ public class GameEngineHost
     {
         Renderer.Clear();
         Game = new Game(InputSystem, Renderer);
-        await Game.InitializeLoop(cancellationToken);
+        var world = Game.InitializeLoop();
+        Seeder.Seed(world);
+        await Game.RunLoop(cancellationToken);
     }
 }

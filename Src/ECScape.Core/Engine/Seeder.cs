@@ -2,7 +2,7 @@
 
 namespace ECScape.Core.Engine;
 
-internal static class Seeder
+public static class Seeder
 {
     public static void Seed(World world)
     {
@@ -14,5 +14,38 @@ internal static class Seeder
 
         EntityFactory.CreateGroundBlock(world, 0, UiInterface.WorldBottom - 2, UiInterface.WorldWidth, 3);
         EntityFactory.CreateCloudBlock(world, 20, 15, 3, 3);
+
+        EntityFactory.CreateCollectable(
+            world,
+            World.Random.Next(0, UiInterface.WorldWidth + 1),
+            World.Random.Next(0, UiInterface.WorldHeight + 1),
+            World.Random.Next(0, 2) == 0 ? '$' : '♥',
+            1,
+            1,
+            1,
+            true);
+        EntityFactory.CreateCollectable(
+            world,
+            World.Random.Next(0, UiInterface.WorldWidth + 1),
+            World.Random.Next(0, UiInterface.WorldHeight + 1),
+            World.Random.Next(0, 2) == 0 ? '$' : '♥',
+            1,
+            1,
+            1,
+            true);
+
+        EntityFactory.CreateMeteoroid(
+            world,
+            World.Random.Next(0, UiInterface.WorldWidth + 1),
+            1,
+            1,
+            true);
+
+        EntityFactory.CreatePowerUp(
+            world,
+            World.Random.Next(0, UiInterface.WorldWidth + 1),
+            1,
+            1,
+            true);
     }
 }
