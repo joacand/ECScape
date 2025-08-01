@@ -92,23 +92,23 @@ class EntityFactory {
         ]);
     }
 
-    static createGroundBlock(world, left, top) {
+    static createGroundBlock(world, left, top, width, height) {
         return this.create(world, [
             new Exists(),
             new Position(left, top),
             new Drawable('=', 'gray'),
-            new Size(1, 1),
+            new Size(width, height),
             new LimitedByBounds(),
             new Solid()
         ]);
     }
 
-    static createCloudBlock(world, left, top) {
+    static createCloudBlock(world, left, top, width, height) {
         return this.create(world, [
             new Exists(),
             new Position(left, top),
             new Drawable('=', 'magenta'),
-            new Size(1, 1),
+            new Size(width, height),
             new LimitedByBounds(),
             new Solid()
         ]);

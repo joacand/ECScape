@@ -9,19 +9,8 @@ class Seeder {
         EntityFactory.createEnemy(world, 30, 0, '%', 3, 1);
         EntityFactory.createEnemy(world, 10, 0, '#', 2, 1);
 
-        // Ground blocks
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < UiInterface.WorldWidth; j++) {
-                EntityFactory.createGroundBlock(world, j, UiInterface.WorldBottom - i);
-            }
-        }
-
-        // Cloud blocks
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                EntityFactory.createCloudBlock(world, 20 - j, 20 - i);
-            }
-        }
+        EntityFactory.createGroundBlock(world, 0, UiInterface.WorldBottom - 2, UiInterface.WorldWidth, 3);
+        EntityFactory.createCloudBlock(world, 20, 20, 3, 3);
     }
 }
 
