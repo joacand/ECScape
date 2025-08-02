@@ -1,13 +1,14 @@
 import UiInterface from './uiInterface.js';
+import Configuration from './configuration.js';
 
 class World {
     constructor() {
         this.Entities = [];
         this.Systems = [];
-        this.Tileset = [UiInterface.Width / 32, UiInterface.Height / 32];
 
-        const tilesX = Math.floor(UiInterface.Width / 32);
-        const tilesY = Math.floor(UiInterface.Height / 32);
+        this.Tileset = [UiInterface.Width / Configuration.TileSize, UiInterface.Height / Configuration.TileSize];
+        const tilesX = Math.floor(UiInterface.Width / Configuration.TileSize);
+        const tilesY = Math.floor(UiInterface.Height / Configuration.TileSize);
 
         this.Tileset = Array.from({ length: tilesX }, () =>
             Array.from({ length: tilesY }, () => 1)

@@ -1,6 +1,7 @@
 import ISystem from './ISystem.js';
 import UiInterface from '../core/uiInterface.js';
 import { Position, Size, Drawable, Exists, Statistics, Health } from '../components/Components.js';
+import Configuration from '../core/configuration.js';
 
 class RenderSystem extends ISystem {
     constructor(canvas) {
@@ -37,7 +38,7 @@ class RenderSystem extends ISystem {
     drawTileset(tileset) {
         if (!tileset) return;
 
-        const tileSize = 32;
+        const tileSize = Configuration.TileSize;
         const tilesetImage = document.getElementById('tileset');
 
         for (let x = 0; x < tileset.length; x++) {

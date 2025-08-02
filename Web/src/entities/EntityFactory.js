@@ -1,6 +1,6 @@
 import {
-    Exists, Health, AffectedByGravity, LimitedByBounds, Position, Drawable, Size, Velocity, PlayerControllable, Statistics, Invulnerable, Npc, DamagesPlayer,
-    PowerUpHealth, Collectable, Solid
+    Exists, Health, AffectedByGravity, LimitedByBounds, Position, Drawable, Size, Velocity, PlayerControllable,
+    Statistics, Invulnerable, Npc, DamagesPlayer, PowerUpHealth, Collectable, Solid
 } from '../components/Components.js';
 import Entity from '../entities/Entity.js';
 import UiInterface from '../core/uiInterface.js';
@@ -88,7 +88,6 @@ class EntityFactory {
             new Size(width, height),
             new Velocity(),
             new Collectable(),
-            new Invulnerable(Date.now() + 3000),
         ]);
     }
 

@@ -2,7 +2,7 @@
 
 **ECScape** is a simple experimental game built as a playground for testing the **Entity-Component-System (ECS)** architecture.
 
-It has a .NET **Console** implementation in `/.NET/` and a HTML5 JavaScript implementation in `/Web`.
+It has a .NET **Console** implementation in `/.NET/` and a HTML5 JavaScript implementation in `/Web/`.
 
 This project was created to:
 - Explore the ECS architectural pattern in a hands-on way

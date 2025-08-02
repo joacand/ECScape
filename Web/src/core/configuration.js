@@ -6,6 +6,7 @@ const Configuration = {
     DefaultGravity: 1530,
     GameWidth: 896,
     GameHeight: 504,
+    TileSize: 32,
 };
 
 export default Configuration;
