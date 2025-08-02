@@ -44,7 +44,6 @@ class RenderSystem extends ISystem {
         for (let x = 0; x < tileset.length; x++) {
             for (let y = 0; y < tileset[x].length; y++) {
                 const tileID = tileset[x][y];
-                if (tileID !== 0 && tileID !== 1) continue;
 
                 this.ctx.drawImage(
                     tilesetImage,
