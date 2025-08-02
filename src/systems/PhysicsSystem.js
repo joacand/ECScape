@@ -26,12 +26,12 @@ class PhysicsSystem extends ISystem {
 
         if (entity.hasComponent(LimitedByBounds)) {
             const velocity = entity.getComponent(Velocity);
-            this.limitBounds(position, size,velocity);
-            this.limitBySolidEntities(world, size, position, originalPosition,velocity);
+            this.limitBounds(position, size, velocity);
+            this.limitBySolidEntities(world, size, position, originalPosition, velocity);
         }
     }
 
-    limitBounds(position, size,velocity) {
+    limitBounds(position, size, velocity) {
         if (position.Left < 0) {
             position.Left = 0;
         }
@@ -52,14 +52,13 @@ class PhysicsSystem extends ISystem {
         position.Left += velocity.X * deltaTime;
 
         velocity.X *= 1.0 - deltaTime * Configuration.MovementDecayRate;
-       // velocity.Y *= 1.0 - deltaTime * Configuration.MovementDecayRate;
 
         // Zero out very small values to prevent jitter
         if (Math.abs(velocity.X) < 0.1) velocity.X = 0;
         if (Math.abs(velocity.Y) < 0.1) velocity.Y = 0;
     }
 
-    limitBySolidEntities(world, size, position, originalPosition,velocity) {
+    limitBySolidEntities(world, size, position, originalPosition, velocity) {
         if (this.isBlocked(position, size, world.getEntitiesWith(Position, Solid))) {
             position.Top = originalPosition.Top;
             velocity.Y = 0;
