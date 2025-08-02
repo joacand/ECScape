@@ -5,12 +5,12 @@ class Seeder {
     static seed(world) {
         EntityFactory.createPlayer(world, 0, 0);
 
-        EntityFactory.createEnemy(world, 30, 0, 'X', 3, 2);
-        EntityFactory.createEnemy(world, 30, 0, '%', 3, 1);
-        EntityFactory.createEnemy(world, 10, 0, '#', 2, 1);
+        EntityFactory.createEnemy(world, 30, 0, 'X', 30, 20);
+        EntityFactory.createEnemy(world, 30, 0, '%', 30, 30);
+        EntityFactory.createEnemy(world, 10, 0, '#', 30, 30);
 
-        EntityFactory.createGroundBlock(world, 0, UiInterface.WorldBottom - 2, UiInterface.WorldWidth, 3);
-        EntityFactory.createCloudBlock(world, 20, 20, 3, 3);
+        EntityFactory.createGroundBlock(world, 0, UiInterface.WorldBottom - 20, UiInterface.WorldWidth, 32);
+        EntityFactory.createCloudBlock(world, 200, 200, 32, 32);
     }
 }
 

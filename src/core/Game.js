@@ -10,15 +10,9 @@ import PhysicsSystem from '../systems/PhysicsSystem.js';
 import DamageSystem from '../systems/DamageSystem.js';
 import SpawnerSystem from '../systems/SpawnerSystem.js';
 import GameStateSystem from '../systems/GameStateSystem.js';
+import Configuration from './configuration.js';
 
 class Game {
-    constructor(canvas) {
-        this.world = new World();
-        this.gameTimer = new GameTimer();
-        this.inputSystem = new InputSystem();
-        this.renderSystem = new RenderSystem(canvas);
-    }
-
     async start() {
         document.addEventListener('DOMContentLoaded', async () => {
             const canvas = document.getElementById('gameCanvas');
@@ -26,14 +20,14 @@ class Game {
             const restartButton = document.getElementById('restartButton');
 
             UiInterface.setBounds(
-                Math.floor(window.innerWidth / 10),
-                Math.floor(window.innerHeight / 10)
+                Configuration.GameWidth,
+                Configuration.GameHeight
             );
 
             window.addEventListener('resize', () => {
                 UiInterface.setBounds(
-                    Math.floor(window.innerWidth / 10),
-                    Math.floor(window.innerHeight / 10)
+                    Configuration.GameWidth,
+                    Configuration.GameHeight
                 );
             });
 
@@ -42,7 +36,6 @@ class Game {
             const runGame = async () => {
                 this.world = new World();
                 this.gameTimer = new GameTimer();
-                this.inputSystem = new InputSystem();
                 this.renderSystem = new RenderSystem(canvas);
 
                 gameOverDiv.style.display = 'none';
@@ -72,7 +65,7 @@ class Game {
     async initializeLoop(cancellationToken) {
         Seeder.seed(this.world);
         this.world.Systems.push(
-            this.inputSystem,
+            new InputSystem(),
             new NpcSystem(),
             new PhysicsSystem(),
             new DamageSystem(),

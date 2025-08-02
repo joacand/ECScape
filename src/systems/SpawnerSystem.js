@@ -26,7 +26,7 @@ class SpawnerSystem extends ISystem {
             this.lastMeteoroidRoll = Date.now();
             return;
         }
-        EntityFactory.createMeteoroid(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 1, 1);
+        EntityFactory.createMeteoroid(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 10, 10);
         this.lastMeteoroid = Date.now();
     }
 
@@ -36,7 +36,7 @@ class SpawnerSystem extends ISystem {
             this.lastPowerUpRoll = Date.now();
             return;
         }
-        EntityFactory.createPowerUp(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 1, 1);
+        EntityFactory.createPowerUp(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 10, 10);
         this.lastPowerUp = Date.now();
     }
 
@@ -44,8 +44,9 @@ class SpawnerSystem extends ISystem {
         const collectables = world.getEntitiesWith(Collectable, Exists);
         if (collectables.length >= 2) return;
 
-        const width = Math.floor(1 + Math.random() * 4);
-        const height = Math.floor(1 + Math.random() * 4);
+        const health = Math.floor(1 + Math.random() * 4);
+        const width = health * 10;
+        const height = health * 10;
         EntityFactory.createCollectable(
             world,
             Math.floor(Math.random() * (UiInterface.WorldWidth + 1)),
@@ -53,7 +54,7 @@ class SpawnerSystem extends ISystem {
             Math.random() < 0.5 ? '$' : '?',
             width,
             height,
-            Math.min(width, height)
+            health
         );
     }
 }
