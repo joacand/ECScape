@@ -27,9 +27,31 @@ class RenderSystem extends ISystem {
         this.ctx.save();
         this.ctx.scale(this.scaleFactor, this.scaleFactor);
 
+        this.drawTileset(world.Tileset);
+
         world.getEntitiesWith(Position, Drawable, Exists).forEach(e => this.drawEntity(e));
         this.drawInterface(world.getEntityWith(Statistics));
         this.ctx.restore();
+    }
+
+    drawTileset(tileset) {
+        if (!tileset) return;
+
+        const tileSize = 32;
+        const tilesetImage = document.getElementById('tileset');
+
+        for (let x = 0; x < tileset.length; x++) {
+            for (let y = 0; y < tileset[x].length; y++) {
+                const tileID = tileset[x][y];
+                if (tileID !== 0 && tileID !== 1) continue;
+
+                this.ctx.drawImage(
+                    tilesetImage,
+                    tileID * tileSize, 0, tileSize, tileSize,
+                    x * tileSize, y * tileSize, tileSize, tileSize
+                );
+            }
+        }
     }
 
     drawEntity(entity) {

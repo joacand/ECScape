@@ -65,12 +65,50 @@ class PhysicsSystem extends ISystem {
     }
 
     limitBySolidEntities(world, size, position, originalPosition, velocity) {
+        // Entity collision logic
         if (this.isBlocked(position, size, world.getEntitiesWith(Position, Solid))) {
             position.Top = originalPosition.Top;
             velocity.Y = 0;
 
             if (this.isBlocked(position, size, world.getEntitiesWith(Position, Solid))) {
                 position.Left = originalPosition.Left;
+            }
+        }
+
+        // Tileset collision logic
+        const tileSize = 32;
+        const playerLeft = position.Left;
+        const playerTop = position.Top;
+        const playerRight = playerLeft + size.Width;
+        const playerBottom = playerTop + size.Height;
+
+        const leftTile = Math.floor(playerLeft / tileSize);
+        const rightTile = Math.floor(playerRight / tileSize);
+        const topTile = Math.floor(playerTop / tileSize);
+        const bottomTile = Math.floor(playerBottom / tileSize);
+
+        for (let x = leftTile; x <= rightTile; x++) {
+            for (let y = topTile; y <= bottomTile; y++) {
+                if (!world.Tileset[x] || world.Tileset[x][y] !== 0) continue;
+
+                const tileLeft = x * tileSize;
+                const tileRight = tileLeft + tileSize;
+                const tileTop = y * tileSize;
+                const tileBottom = tileTop + tileSize;
+
+                if (playerBottom > tileTop && originalPosition.Top + size.Height <= tileTop) {
+                    position.Top = tileTop - size.Height;
+                    velocity.Y = 0;
+                } else if (playerTop < tileBottom && originalPosition.Top >= tileBottom) {
+                    position.Top = tileBottom;
+                    velocity.Y = 0;
+                }
+
+                if (velocity.X < 0 && playerRight > tileLeft && originalPosition.Left + size.Width <= tileLeft) {
+                    position.Left = tileLeft - size.Width;
+                } else if (velocity.X > 0 && playerLeft < tileRight && originalPosition.Left >= tileRight) {
+                    position.Left = tileRight;
+                }
             }
         }
     }
