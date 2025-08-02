@@ -17,19 +17,21 @@ class PhysicsSystem extends ISystem {
 
         const originalPosition = new Position(position.Left, position.Top);
 
-        position.Top += gravity * deltaTime;
 
         if (entity.hasComponent(Velocity)) {
-            this.handleVelocity(entity.getRequiredComponent(Velocity), position, deltaTime);
+            const velocity = entity.getRequiredComponent(Velocity);
+            velocity.Y -= gravity * deltaTime;
+            this.handleVelocity(velocity, position, deltaTime);
         }
 
         if (entity.hasComponent(LimitedByBounds)) {
-            this.limitBounds(position, size);
-            this.limitBySolidEntities(world, size, position, originalPosition);
+            const velocity = entity.getComponent(Velocity);
+            this.limitBounds(position, size,velocity);
+            this.limitBySolidEntities(world, size, position, originalPosition,velocity);
         }
     }
 
-    limitBounds(position, size) {
+    limitBounds(position, size,velocity) {
         if (position.Left < 0) {
             position.Left = 0;
         }
@@ -41,6 +43,7 @@ class PhysicsSystem extends ISystem {
         }
         if (position.Top + size.Height >= UiInterface.WorldBottom) {
             position.Top = UiInterface.WorldBottom;
+            velocity.Y = 0;
         }
     }
 
@@ -49,16 +52,18 @@ class PhysicsSystem extends ISystem {
         position.Left += velocity.X * deltaTime;
 
         velocity.X *= 1.0 - deltaTime * Configuration.MovementDecayRate;
-        velocity.Y *= 1.0 - deltaTime * Configuration.MovementDecayRate;
+       // velocity.Y *= 1.0 - deltaTime * Configuration.MovementDecayRate;
 
         // Zero out very small values to prevent jitter
         if (Math.abs(velocity.X) < 0.1) velocity.X = 0;
         if (Math.abs(velocity.Y) < 0.1) velocity.Y = 0;
     }
 
-    limitBySolidEntities(world, size, position, originalPosition) {
+    limitBySolidEntities(world, size, position, originalPosition,velocity) {
         if (this.isBlocked(position, size, world.getEntitiesWith(Position, Solid))) {
             position.Top = originalPosition.Top;
+            velocity.Y = 0;
+
             if (this.isBlocked(position, size, world.getEntitiesWith(Position, Solid))) {
                 position.Left = originalPosition.Left;
             }

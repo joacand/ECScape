@@ -22,8 +22,8 @@ class NpcSystem extends ISystem {
         const damagesPlayer = entity.getComponent(DamagesPlayer);
 
         // Bias to move towards the player     
-        let left = -1800;
-        let right = 1800;
+        let left = -2100;
+        let right = 2100;
         if (damagesPlayer) {
             const distanceToPlayer = playerPosition ?
                 Math.min(Math.max((playerPosition.Left - position.Left) / 40, -1.0), 1.0) : 0;
@@ -35,7 +35,7 @@ class NpcSystem extends ISystem {
         this.updateInterval = Math.random() * 500;
         this.lastUpdateTimes.set(entity, Date.now());
         const horizontal = Math.floor(left + Math.random() * (right - left));
-        let vertical = Math.floor(-3800 + Math.random() * 7800);
+        let vertical = Math.floor(-880 + Math.random() * 1780);
         vertical = Math.abs(vertical) < 2 ? 0 : vertical;
 
         velocity.Y = vertical;
