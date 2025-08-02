@@ -26,10 +26,14 @@ export class DamagesPlayer extends IComponent {
 }
 
 export class Drawable extends IComponent {
-    constructor(symbol, color = 'white') {
+    constructor(symbol, color = 'white', sprite = null, tileable = true) {
         super();
         this.Symbol = symbol;
         this.Color = color;
+        this.Sprite = sprite;
+        this.SpriteWidth = sprite ? sprite.width : null;
+        this.SpriteHeight = sprite ? sprite.height : null;
+        this.Tileable = tileable;
     }
 }
 
@@ -70,9 +74,13 @@ export class PowerUpHealth extends IComponent { }
 
 export class Size extends IComponent {
     constructor(width, height) {
+        if (!width) { width = 10; }
+        if (!height) { height = 10; }
         super();
         this.Width = width;
         this.Height = height;
+        this.OriginalWidth = width;
+        this.OriginalHeight = height;
     }
 }
 

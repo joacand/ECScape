@@ -26,10 +26,10 @@ class DamageSystem extends ISystem {
             player.addComponent(new Invulnerable(Date.now() + damageComponent.DamageInterval));
 
             const damage = damageComponent.DamageAmount;
-            playerSize.Width -= damage;
-            playerSize.Height -= damage;
-            if (playerSize.Width <= 0) playerSize.Width = 1;
-            if (playerSize.Height <= 0) playerSize.Height = 1;
+            playerSize.Width -= playerSize.OriginalWidth / 2;
+            playerSize.Height -= playerSize.OriginalHeight / 2;
+            if (playerSize.Width <= 0) playerSize.Width = 10;
+            if (playerSize.Height <= 0) playerSize.Height = 10;
         }
     }
 
@@ -49,10 +49,10 @@ class DamageSystem extends ISystem {
             const health = entity.getRequiredComponent(Health);
             entity.addComponent(new Invulnerable(Date.now() + collectableComponent.CollectInterval));
             health.Hearts -= 1;
-            size.Width -= 1;
-            size.Height -= 1;
-            if (size.Width <= 0) size.Width = 1;
-            if (size.Height <= 0) size.Height = 1;
+            size.Width -= size.OriginalWidth / 2;
+            size.Height -= size.OriginalHeight / 2;
+            if (size.Width <= 0) size.Width = 10;
+            if (size.Height <= 0) size.Height = 10;
             if (health.Hearts <= 0) {
                 entity.removeComponent(Exists);
             }
@@ -74,8 +74,8 @@ class DamageSystem extends ISystem {
         if (this.isColliding(position, size, playerPosition, playerSize)) {
             const playerHealth = player.getRequiredComponent(Health);
             playerHealth.Hearts += 1;
-            playerSize.Width += 1;
-            playerSize.Height += 1;
+            playerSize.Width += playerSize.OriginalWidth / 2;
+            playerSize.Height += playerSize.OriginalHeight / 2
             entity.removeComponent(Exists);
             const statistics = player.getRequiredComponent(Statistics);
             statistics.Score += 1;

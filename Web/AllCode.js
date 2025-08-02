@@ -29,10 +29,11 @@ export class DamagesPlayer extends IComponent {
 }
 
 export class Drawable extends IComponent {
-    constructor(symbol, color = 'white') {
+    constructor(symbol, color = 'white', sprite = null) {
         super();
         this.Symbol = symbol;
         this.Color = color;
+        this.Sprite = sprite;
     }
 }
 
@@ -73,6 +74,8 @@ export class PowerUpHealth extends IComponent { }
 
 export class Size extends IComponent {
     constructor(width, height) {
+        if (!width) { width = 10; }
+        if (!height) { height = 10; }
         super();
         this.Width = width;
         this.Height = height;
@@ -101,9 +104,9 @@ export class Velocity extends IComponent {
 const Configuration = {
     TargetFrameRate: 120.0,
     MovementDecayRate: 13,
-    PlayerMovementVertical: 80,
-    PlayerMovementHorizontal: 20,
-    DefaultGravity: 40
+    PlayerMovementVertical: 600,
+    PlayerMovementHorizontal: 200,
+    DefaultGravity: 300
 };
 
 export default Configuration;
@@ -127,31 +130,34 @@ class Game {
     constructor(canvas) {
         this.world = new World();
         this.gameTimer = new GameTimer();
-        this.inputSystem = new InputSystem();
         this.renderSystem = new RenderSystem(canvas);
     }
 
     async start() {
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const canvas = document.getElementById('gameCanvas');
             const gameOverDiv = document.getElementById('gameOver');
             const restartButton = document.getElementById('restartButton');
 
             UiInterface.setBounds(
-                Math.floor(window.innerWidth / 10),
-                Math.floor(window.innerHeight / 10)
+                640,
+                360
             );
 
             window.addEventListener('resize', () => {
                 UiInterface.setBounds(
-                    Math.floor(window.innerWidth / 10),
-                    Math.floor(window.innerHeight / 10)
+                    640,
+                    360
                 );
             });
 
             let cancellationToken = { isCancellationRequested: false };
 
             const runGame = async () => {
+                this.world = new World();
+                this.gameTimer = new GameTimer();
+                this.renderSystem = new RenderSystem(canvas);
+
                 gameOverDiv.style.display = 'none';
                 cancellationToken = { isCancellationRequested: false };
 
@@ -172,14 +178,14 @@ class Game {
                 setTimeout(runGame, 100);
             });
 
-            runGame();
+            await runGame();
         });
     }
 
     async initializeLoop(cancellationToken) {
         Seeder.seed(this.world);
         this.world.Systems.push(
-            this.inputSystem,
+            new InputSystem(),
             new NpcSystem(),
             new PhysicsSystem(),
             new DamageSystem(),
@@ -243,23 +249,12 @@ class Seeder {
     static seed(world) {
         EntityFactory.createPlayer(world, 0, 0);
 
-        EntityFactory.createEnemy(world, 30, 0, 'X', 3, 2);
-        EntityFactory.createEnemy(world, 30, 0, '%', 3, 1);
-        EntityFactory.createEnemy(world, 10, 0, '#', 2, 1);
+        EntityFactory.createEnemy(world, 30, 0, 'X', 30, 20);
+        EntityFactory.createEnemy(world, 30, 0, '%', 30, 10);
+        EntityFactory.createEnemy(world, 10, 0, '#', 20, 10);
 
-        // Ground blocks
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < UiInterface.WorldWidth; j++) {
-                EntityFactory.createGroundBlock(world, j, UiInterface.WorldBottom - i);
-            }
-        }
-
-        // Cloud blocks
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                EntityFactory.createCloudBlock(world, 20 - j, 20 - i);
-            }
-        }
+        EntityFactory.createGroundBlock(world, 0, UiInterface.WorldBottom - 20, UiInterface.WorldWidth, 30);
+        EntityFactory.createCloudBlock(world, 200, 200, 30, 30);
     }
 }
 
@@ -268,7 +263,7 @@ export default Seeder;
 // ===== File: src\core\uiInterface.js =====
 
 const UiInterface = {
-    InterfaceHeight: 3,
+    InterfaceHeight: 30,
     Width: 0,
     Height: 0,
 
@@ -279,10 +274,12 @@ const UiInterface = {
 
     get InterfaceStart() { return 0; },
     get InterfaceEnd() { return this.InterfaceHeight; },
-    get TotalWidth() { return Math.floor(window.innerWidth / 10); }, // Adjust based on cell size
-    get TotalHeight() { return Math.floor(window.innerHeight / 10); }, // Adjust based on cell size
+
+    get TotalWidth() { return this.Width; },
+    get TotalHeight() { return this.Height; },
+
     get WorldWidth() { return this.TotalWidth; },
-    get WorldHeight() { return this.TotalHeight - 3; },
+    get WorldHeight() { return this.TotalHeight - 30; },
     get WorldTop() { return this.InterfaceHeight; },
     get WorldBottom() { return this.Height - 1; }
 };
@@ -380,14 +377,12 @@ class EntityFactory {
             new AffectedByGravity(),
             new LimitedByBounds(),
             new Position(left, top),
-            new Drawable('?', 'green'),
-            new Size(3, 3),
+            new Drawable('?', 'green', document.getElementById('playerSprite')),
+            new Size(30, 30),
             new Velocity(),
             new PlayerControllable(),
             new Statistics(),
-            new Invulnerable({
-                ExpirationTime: Date.now() + 3000
-            }),
+            new Invulnerable(Date.now() + 3000),
         ]);
     }
 
@@ -398,7 +393,7 @@ class EntityFactory {
             new LimitedByBounds(),
             new Position(left, top),
             new Npc(),
-            new Drawable(symbol, 'red'),
+            new Drawable(symbol, 'red', document.getElementById('enemySprite')),
             new Size(width, height),
             new Velocity(),
             new DamagesPlayer(1)
@@ -410,7 +405,7 @@ class EntityFactory {
             new Exists(),
             new AffectedByGravity(),
             new Position(left, UiInterface.WorldTop),
-            new Drawable('?', 'darkred'),
+            new Drawable('?', 'darkred', document.getElementById('enemySprite')),
             new Size(width, height),
             new Velocity(
                 Math.floor(-2 + Math.random() * 4),
@@ -443,33 +438,31 @@ class EntityFactory {
             new LimitedByBounds(),
             new Position(left, top),
             new Npc(),
-            new Drawable(symbol, 'yellow'),
+            new Drawable(symbol, 'yellow', document.getElementById('collectableSprite')),
             new Size(width, height),
             new Velocity(),
             new Collectable(),
-            new Invulnerable({
-                ExpirationTime: Date.now() + 3000
-            }),
+            new Invulnerable(Date.now() + 3000),
         ]);
     }
 
-    static createGroundBlock(world, left, top) {
+    static createGroundBlock(world, left, top, width, height) {
         return this.create(world, [
             new Exists(),
             new Position(left, top),
-            new Drawable('=', 'gray'),
-            new Size(1, 1),
+            new Drawable('=', 'gray', document.getElementById('groundSprite')),
+            new Size(width, height),
             new LimitedByBounds(),
             new Solid()
         ]);
     }
 
-    static createCloudBlock(world, left, top) {
+    static createCloudBlock(world, left, top, width, height) {
         return this.create(world, [
             new Exists(),
             new Position(left, top),
-            new Drawable('=', 'magenta'),
-            new Size(1, 1),
+            new Drawable('=', 'magenta', document.getElementById('groundSprite')),
+            new Size(width, height),
             new LimitedByBounds(),
             new Solid()
         ]);
@@ -481,7 +474,7 @@ export default EntityFactory;
 // ===== File: src\systems\DamageSystem.js =====
 
 import ISystem from './ISystem.js';
-import { Position, Size, DamagesPlayer, Collectable, PowerUpHealth, Invulnerable, Exists, PlayerControllable } from '../components/Components.js';
+import { Position, Size, DamagesPlayer, Collectable, PowerUpHealth, Invulnerable, Exists, PlayerControllable, Health, Statistics } from '../components/Components.js';
 
 class DamageSystem extends ISystem {
     update(world, deltaTime) {
@@ -505,13 +498,11 @@ class DamageSystem extends ISystem {
         if (this.isColliding(position, size, playerPosition, playerSize) && this.isVulnerable(invulnerable)) {
             const playerHealth = player.getRequiredComponent(Health);
             playerHealth.Hearts -= damageComponent.DamageAmount;
-            player.addComponent(new Invulnerable({
-                ExpirationTime: Date.now() + damageComponent.DamageInterval
-            }));
+            player.addComponent(new Invulnerable(Date.now() + damageComponent.DamageInterval));
 
             const damage = damageComponent.DamageAmount;
-            playerSize.Width -= damage;
-            playerSize.Height -= damage;
+            playerSize.Width /= 2;
+            playerSize.Height /= 2;
             if (playerSize.Width <= 0) playerSize.Width = 1;
             if (playerSize.Height <= 0) playerSize.Height = 1;
         }
@@ -531,12 +522,10 @@ class DamageSystem extends ISystem {
 
         if (this.isColliding(position, size, playerPosition, playerSize) && this.isVulnerable(invulnerable)) {
             const health = entity.getRequiredComponent(Health);
-            entity.addComponent(new Invulnerable({
-                ExpirationTime: Date.now() + collectableComponent.CollectInterval
-            }));
+            entity.addComponent(new Invulnerable(Date.now() + collectableComponent.CollectInterval));
             health.Hearts -= 1;
-            size.Width -= 1;
-            size.Height -= 1;
+            size.Width /= 2;
+            size.Height /= 2;
             if (size.Width <= 0) size.Width = 1;
             if (size.Height <= 0) size.Height = 1;
             if (health.Hearts <= 0) {
@@ -560,8 +549,8 @@ class DamageSystem extends ISystem {
         if (this.isColliding(position, size, playerPosition, playerSize)) {
             const playerHealth = player.getRequiredComponent(Health);
             playerHealth.Hearts += 1;
-            playerSize.Width += 1;
-            playerSize.Height += 1;
+            playerSize.Width *= 2;
+            playerSize.Height *= 2;
             entity.removeComponent(Exists);
             const statistics = player.getRequiredComponent(Statistics);
             statistics.Score += 1;
@@ -660,13 +649,13 @@ export default ISystem;
 // ===== File: src\systems\NpcSystem.js =====
 
 import ISystem from './ISystem.js';
-import { PlayerControllable, Velocity, Position, Npc } from '../components/Components.js';
+import { PlayerControllable, Velocity, Position, Npc, DamagesPlayer } from '../components/Components.js';
 
 class NpcSystem extends ISystem {
     constructor() {
         super();
         this.lastUpdateTimes = new Map();
-        this.updateInterval = 500;
+        this.updateInterval = 100;
     }
 
     update(world, deltaTime) {
@@ -680,19 +669,22 @@ class NpcSystem extends ISystem {
         const playerPosition = world.getEntityWith(PlayerControllable)?.getComponent(Position);
         const velocity = entity.getRequiredComponent(Velocity);
         const position = entity.getRequiredComponent(Position);
+        const damagesPlayer = entity.getComponent(DamagesPlayer);
 
-        // Bias to move towards the player
-        let left = -200;
-        let right = 200;
-        const distanceToPlayer = playerPosition ?
-            Math.min(Math.max((playerPosition.Left - position.Left) / 40, -1.0), 1.0) : 0;
-        const bias = distanceToPlayer * 50.0;
-        left += bias;
-        right += bias;
+        // Bias to move towards the player     
+        let left = -500;
+        let right = 500;
+        if (damagesPlayer) {
+            const distanceToPlayer = playerPosition ?
+                Math.min(Math.max((playerPosition.Left - position.Left) / 40, -1.0), 1.0) : 0;
+            const bias = distanceToPlayer * 100.0;
+            left += bias;
+            right += bias;
+        }
 
         this.lastUpdateTimes.set(entity, Date.now());
         const horizontal = Math.floor(left + Math.random() * (right - left));
-        let vertical = Math.floor(-10 + Math.random() * 210);
+        let vertical = Math.floor(-1500 + Math.random() * 3100);
         vertical = Math.abs(vertical) < 2 ? 0 : vertical;
 
         velocity.Y = vertical;
@@ -796,14 +788,13 @@ class RenderSystem extends ISystem {
         super();
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
-        this.cellSize = 10; // Size of each cell in pixels
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
     }
 
     resizeCanvas() {
-        this.canvas.width = UiInterface.TotalWidth * this.cellSize;
-        this.canvas.height = UiInterface.TotalHeight * this.cellSize;
+        this.canvas.width = UiInterface.TotalWidth;
+        this.canvas.height = UiInterface.TotalHeight;
     }
 
     update(world, deltaTime) {
@@ -819,34 +810,24 @@ class RenderSystem extends ISystem {
     drawEntity(entity) {
         const drawable = entity.getRequiredComponent(Drawable);
         const position = entity.getRequiredComponent(Position);
-        const size = entity.getComponent(Size) || new Size(1, 1);
+        const size = entity.getComponent(Size) || new Size();
 
         this.ctx.fillStyle = drawable.Color;
 
-        for (let x = 0; x < size.Width; x++) {
-            for (let y = 0; y < size.Height; y++) {
-                const newPos = {
-                    Left: position.Left + x,
-                    Top: position.Top + y
-                };
-
-                if (newPos.Left < 0 || newPos.Left >= UiInterface.TotalWidth ||
-                    newPos.Top < 0 || newPos.Top >= UiInterface.TotalHeight) {
-                    continue;
-                }
-
-                this.ctx.fillText(
-                    drawable.Symbol,
-                    newPos.Left * this.cellSize + this.cellSize / 2,
-                    newPos.Top * this.cellSize + this.cellSize / 2
-                );
-            }
+        if (drawable.Sprite) {
+            this.ctx.drawImage(
+                drawable.Sprite,
+                position.Left,
+                position.Top,
+                size.Width,
+                size.Height
+            );
         }
     }
 
     drawInterface(playerEntity) {
         this.ctx.fillStyle = 'gray';
-        this.ctx.fillRect(0, 0, this.canvas.width, UiInterface.InterfaceEnd * this.cellSize);
+        this.ctx.fillRect(0, 0, this.canvas.width, UiInterface.InterfaceEnd);
 
         this.ctx.fillStyle = 'cyan';
         this.ctx.font = 'bold 16px monospace';
@@ -862,7 +843,7 @@ class RenderSystem extends ISystem {
         this.ctx.fillText(
             gameTitle,
             this.canvas.width / 2,
-            (UiInterface.InterfaceStart + 1) * this.cellSize + this.cellSize / 2
+            UiInterface.InterfaceStart + 20
         );
     }
 }
@@ -899,7 +880,7 @@ class SpawnerSystem extends ISystem {
             this.lastMeteoroidRoll = Date.now();
             return;
         }
-        EntityFactory.createMeteoroid(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 1, 1);
+        EntityFactory.createMeteoroid(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 10, 10);
         this.lastMeteoroid = Date.now();
     }
 
@@ -909,7 +890,7 @@ class SpawnerSystem extends ISystem {
             this.lastPowerUpRoll = Date.now();
             return;
         }
-        EntityFactory.createPowerUp(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 1, 1);
+        EntityFactory.createPowerUp(world, Math.floor(Math.random() * (UiInterface.WorldWidth + 1)), 10, 10);
         this.lastPowerUp = Date.now();
     }
 
@@ -917,8 +898,8 @@ class SpawnerSystem extends ISystem {
         const collectables = world.getEntitiesWith(Collectable, Exists);
         if (collectables.length >= 2) return;
 
-        const width = Math.floor(1 + Math.random() * 4);
-        const height = Math.floor(1 + Math.random() * 4);
+        const width = Math.floor(1 + Math.random() * 4) * 10;
+        const height = Math.floor(1 + Math.random() * 4) * 10;
         EntityFactory.createCollectable(
             world,
             Math.floor(Math.random() * (UiInterface.WorldWidth + 1)),
@@ -953,6 +934,10 @@ export default SpawnerSystem;
             <button id="restartButton">Restart</button>
         </div>
     </div>
+    <img id="collectableSprite" src="./res/collectable.png" alt="sprite" />
+    <img id="groundSprite" src="./res/ground.png" alt="sprite" />
+    <img id="playerSprite" src="./res/player.png" alt="sprite" />
+    <img id="enemySprite" src="./res/enemy.png" alt="sprite" />
     <script type="module" src="./main.js"></script>
 </body>
 

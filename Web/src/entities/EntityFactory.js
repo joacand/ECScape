@@ -23,8 +23,8 @@ class EntityFactory {
             new AffectedByGravity(),
             new LimitedByBounds(),
             new Position(left, top),
-            new Drawable('?', 'green'),
-            new Size(3, 3),
+            new Drawable('?', 'green', document.getElementById('playerSprite'), false),
+            new Size(30, 30),
             new Velocity(),
             new PlayerControllable(),
             new Statistics(),
@@ -39,7 +39,7 @@ class EntityFactory {
             new LimitedByBounds(),
             new Position(left, top),
             new Npc(),
-            new Drawable(symbol, 'red'),
+            new Drawable(symbol, 'red', document.getElementById('enemySprite'), false),
             new Size(width, height),
             new Velocity(),
             new DamagesPlayer(1)
@@ -51,7 +51,7 @@ class EntityFactory {
             new Exists(),
             new AffectedByGravity(),
             new Position(left, UiInterface.WorldTop),
-            new Drawable('?', 'darkred'),
+            new Drawable('?', 'darkred', document.getElementById('enemySprite'), false),
             new Size(width, height),
             new Velocity(
                 Math.floor(-2 + Math.random() * 4),
@@ -64,10 +64,10 @@ class EntityFactory {
     static createPowerUp(world, left, width, height) {
         return this.create(world, [
             new Exists(),
-            new AffectedByGravity(3),
+            new AffectedByGravity(200),
             new PowerUpHealth(),
             new Position(left, UiInterface.WorldTop),
-            new Drawable('+', 'cyan'),
+            new Drawable('+', 'cyan', document.getElementById('powerupSprite'), false),
             new Size(width, height),
             new Velocity(
                 Math.floor(-2 + Math.random() * 4),
@@ -84,7 +84,7 @@ class EntityFactory {
             new LimitedByBounds(),
             new Position(left, top),
             new Npc(),
-            new Drawable(symbol, 'yellow'),
+            new Drawable(symbol, 'yellow', document.getElementById('collectableSprite'), false),
             new Size(width, height),
             new Velocity(),
             new Collectable(),
@@ -96,7 +96,7 @@ class EntityFactory {
         return this.create(world, [
             new Exists(),
             new Position(left, top),
-            new Drawable('=', 'gray'),
+            new Drawable('=', 'gray', document.getElementById('groundSprite')),
             new Size(width, height),
             new LimitedByBounds(),
             new Solid()
@@ -107,7 +107,7 @@ class EntityFactory {
         return this.create(world, [
             new Exists(),
             new Position(left, top),
-            new Drawable('=', 'magenta'),
+            new Drawable('=', 'magenta', document.getElementById('groundSprite')),
             new Size(width, height),
             new LimitedByBounds(),
             new Solid()

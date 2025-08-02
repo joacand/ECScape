@@ -1,5 +1,5 @@
 const UiInterface = {
-    InterfaceHeight: 3,
+    InterfaceHeight: 30,
     Width: 0,
     Height: 0,
 
@@ -10,10 +10,12 @@ const UiInterface = {
 
     get InterfaceStart() { return 0; },
     get InterfaceEnd() { return this.InterfaceHeight; },
-    get TotalWidth() { return Math.floor(window.innerWidth / 10); }, // Adjust based on cell size
-    get TotalHeight() { return Math.floor(window.innerHeight / 10); }, // Adjust based on cell size
+
+    get TotalWidth() { return this.Width; },
+    get TotalHeight() { return this.Height; },
+
     get WorldWidth() { return this.TotalWidth; },
-    get WorldHeight() { return this.TotalHeight - 3; },
+    get WorldHeight() { return this.TotalHeight - 30; },
     get WorldTop() { return this.InterfaceHeight; },
     get WorldBottom() { return this.Height - 1; }
 };

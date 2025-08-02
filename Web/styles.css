@@ -17,6 +17,10 @@ body {
 #gameCanvas {
     border: 2px solid #444;
     background-color: #000033;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 #gameOver {
