@@ -9,7 +9,6 @@ class Seeder {
         EntityFactory.createEnemy(world, 30, 0, '%', 30, 30);
         EntityFactory.createEnemy(world, 10, 0, '#', 30, 30);
 
-        EntityFactory.createGroundBlock(world, 0, UiInterface.WorldBottom - 20, UiInterface.WorldWidth, 32);
         EntityFactory.createCloudBlock(world, 200, 200, 32, 32);
     }
 }
