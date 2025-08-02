@@ -1,10 +1,10 @@
-import tilemap from './tilemap.js';
+import TileMap from './TileMap.js';
 
 class World {
     constructor() {
         this.Entities = [];
         this.Systems = [];
-        this.Tileset = tilemap;
+        this.Tileset = TileMap.Tiles;
         this.Random = Math.random;
     }
 
