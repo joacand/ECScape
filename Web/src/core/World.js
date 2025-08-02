@@ -1,7 +1,10 @@
+import UiInterface from './uiInterface.js';
+
 class World {
     constructor() {
         this.Entities = [];
         this.Systems = [];
+        this.Tileset = [UiInterface.Width / 32, UiInterface.Height / 32];
         this.Random = Math.random;
     }
 

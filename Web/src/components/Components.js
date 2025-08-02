@@ -64,6 +64,7 @@ export class Position extends IComponent {
         super();
         this.Left = left;
         this.Top = top;
+        this.Direction = "r";
     }
 
     get LeftInt() { return Math.floor(this.Left); }

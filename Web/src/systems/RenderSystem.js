@@ -44,13 +44,27 @@ class RenderSystem extends ISystem {
             const spriteHeight = drawable.SpriteHeight;
 
             if (size.Width < spriteWidth || size.Height < spriteHeight || !drawable.Tileable) {
-                this.ctx.drawImage(
-                    drawable.Sprite,
-                    position.Left,
-                    position.Top,
-                    size.Width,
-                    size.Height
-                );
+                if (position.Direction === 'l') {
+                    this.ctx.save();
+                    this.ctx.translate(position.Left + size.Width, position.Top);
+                    this.ctx.scale(-1, 1);
+                    this.ctx.drawImage(
+                        drawable.Sprite,
+                        0,
+                        0,
+                        size.Width,
+                        size.Height
+                    );
+                    this.ctx.restore();
+                } else {
+                    this.ctx.drawImage(
+                        drawable.Sprite,
+                        position.Left,
+                        position.Top,
+                        size.Width,
+                        size.Height
+                    );
+                }
             }
             else {
                 const tilesX = Math.ceil(size.Width / spriteWidth);

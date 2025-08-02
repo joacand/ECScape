@@ -54,8 +54,14 @@ class PhysicsSystem extends ISystem {
         velocity.X *= 1.0 - deltaTime * Configuration.MovementDecayRate;
 
         // Zero out very small values to prevent jitter
-        if (Math.abs(velocity.X) < 0.1) velocity.X = 0;
+        if (Math.abs(velocity.X) < 0.1) {
+            velocity.X = 0;
+        }
+        else {
+            position.Direction = velocity.X < 0 ? 'l' : 'r';
+        }
         if (Math.abs(velocity.Y) < 0.1) velocity.Y = 0;
+
     }
 
     limitBySolidEntities(world, size, position, originalPosition, velocity) {
