@@ -55,7 +55,7 @@ class EntityFactory {
             new Size(width, height),
             new Velocity(
                 Math.floor(-2 + Math.random() * 4),
-                5
+                0
             ),
             new DamagesPlayer(1)
         ]);
