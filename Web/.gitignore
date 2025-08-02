@@ -17,3 +17,4 @@ build/
 
 # Optional: dependencies (if you use npm for tooling later)
 node_modules/
+AllCode.js

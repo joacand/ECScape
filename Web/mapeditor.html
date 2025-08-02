@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《⧼ ECScape Map Editor ⧽》</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mapeditor.css">
+</head>
+
+<body>
+    <div class="nav-container">
+        <a class="nav-link" href="index.html">Game</a>
+        <a class="nav-link" href="mapeditor.html">Map Editor</a>
+    </div>
+    <h1>Map Editor</h1>
+    <p>This is a developer page to create a tilemap that can be copied to tilemap.js. This is for development only.</p>
+    <div id="editorContainer">
+        <canvas id="mapEditorCanvas"></canvas>
+
+        <div id="toolbar"> </div>
+
+        <div id="outputContainer">
+            <textarea id="tilesetOutput"></textarea>
+            <div id="actions">
+                <button id="copyBtn">Copy to Clipboard</button>
+                <button id="clearBtn">Clear Canvas</button>
+            </div>
+        </div>
+    </div>
+
+    <img id="tileset" src="./res/tileset.png" alt="sprite" style="visibility: hidden;" />
+    <script src="mapeditor.js" type="module"></script>
+</body>
+
+</html>
