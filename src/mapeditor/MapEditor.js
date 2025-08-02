@@ -1,6 +1,6 @@
 import Configuration from '../core/configuration.js';
 import UiInterface from '../core/uiInterface.js';
-import tilemap from '../core/tilemap.js'; 
+import TileMap from '../core/TileMap.js';
 
 class MapEditor {
     initialize() {
@@ -21,7 +21,7 @@ class MapEditor {
         const copyBtn = document.getElementById('copyBtn');
         const clearBtn = document.getElementById('clearBtn');
 
-        let tileset = tilemap;
+        let tileset = TileMap.Tiles;
         let selectedTile = 0;
 
         canvas.width = GRID_WIDTH * TILE_SIZE;
@@ -120,7 +120,7 @@ class MapEditor {
                 .replace(/\[\[/, '[\n  [')
                 .replace(/]]/, ']\n]');
 
-            outputTextarea.value = `// Generated tilemap.js\nexport default ${formatted};`;
+            outputTextarea.value = `${formatted};`;
         }
 
         copyBtn.addEventListener('click', () => {

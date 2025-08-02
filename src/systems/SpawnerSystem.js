@@ -50,7 +50,7 @@ class SpawnerSystem extends ISystem {
         EntityFactory.createCollectable(
             world,
             Math.floor(Math.random() * (UiInterface.WorldWidth + 1)),
-            Math.floor(Math.random() * (UiInterface.WorldHeight + 1)),
+            0,
             Math.random() < 0.5 ? '$' : '?',
             width,
             height,
