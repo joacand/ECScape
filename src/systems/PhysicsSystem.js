@@ -89,7 +89,7 @@ class PhysicsSystem extends ISystem {
 
         for (let x = leftTile; x <= rightTile; x++) {
             for (let y = topTile; y <= bottomTile; y++) {
-                if (!world.Tileset[x] || world.Tileset[x][y] !== 0) continue;
+                if (!world.Tileset[x] || world.Tileset[x][y] === 1) continue;
 
                 const tileLeft = x * tileSize;
                 const tileRight = tileLeft + tileSize;

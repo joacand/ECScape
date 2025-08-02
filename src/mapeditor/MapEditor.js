@@ -29,7 +29,12 @@ class MapEditor {
 
         const tileTypes = [
             { id: 0, name: 'Ground' },
-            { id: 1, name: 'Sky' }
+            { id: 1, name: 'Sky' },
+            { id: 2, name: 'Dirt' },
+            { id: 3, name: 'DirtGrass' },
+            { id: 4, name: 'Sky1' },
+            { id: 5, name: 'Sky2' },
+            { id: 6, name: 'Sky3' }
         ];
 
         tileTypes.forEach(tile => {
