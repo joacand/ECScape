@@ -5,7 +5,8 @@ const Configuration = {
     PlayerMovementHorizontal: 250,
     DefaultGravity: 1530,
     GameWidth: 896,
-    GameHeight: 504,
+    GameHeight: 512,
+    TileSize: 32,
 };
 
 export default Configuration;

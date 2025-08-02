@@ -9,6 +9,10 @@
 </head>
 
 <body>
+    <div class="nav-container">
+        <a class="nav-link" href="index.html">Game</a>
+        <a class="nav-link" href="mapeditor.html">Map Editor</a>
+    </div>
     <div id="gameContainer">
         <canvas id="gameCanvas"></canvas>
         <div id="gameOver">
@@ -16,12 +20,12 @@
             <button id="restartButton">Restart</button>
         </div>
     </div>
-    <img id="tileset" src="./res/tileset.png" alt="sprite" />
-    <img id="powerupSprite" src="./res/powerup.png" alt="sprite" />
-    <img id="collectableSprite" src="./res/collectable.png" alt="sprite" />
-    <img id="groundSprite" src="./res/ground.png" alt="sprite" />
-    <img id="playerSprite" src="./res/player.png" alt="sprite" />
-    <img id="enemySprite" src="./res/enemy.png" alt="sprite" />
+    <img id="tileset" src="./res/tileset.png" alt="sprite" style="visibility: hidden;" />
+    <img id="powerupSprite" src="./res/powerup.png" alt="sprite" style="visibility: hidden;" />
+    <img id="collectableSprite" src="./res/collectable.png" alt="sprite" style="visibility: hidden;" />
+    <img id="groundSprite" src="./res/ground.png" alt="sprite" style="visibility: hidden;" />
+    <img id="playerSprite" src="./res/player.png" alt="sprite" style="visibility: hidden;" />
+    <img id="enemySprite" src="./res/enemy.png" alt="sprite" style="visibility: hidden;" />
     <script type="module" src="./main.js"></script>
 </body>
 

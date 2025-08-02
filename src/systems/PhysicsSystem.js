@@ -102,11 +102,9 @@ class PhysicsSystem extends ISystem {
                 } else if (playerTop < tileBottom && originalPosition.Top >= tileBottom) {
                     position.Top = tileBottom;
                     velocity.Y = 0;
-                }
-
-                if (velocity.X < 0 && playerRight > tileLeft && originalPosition.Left + size.Width <= tileLeft) {
+                } else if (playerRight > tileLeft && originalPosition.Left + size.Width <= tileLeft) {
                     position.Left = tileLeft - size.Width;
-                } else if (velocity.X > 0 && playerLeft < tileRight && originalPosition.Left >= tileRight) {
+                } else if (playerLeft < tileRight && originalPosition.Left >= tileRight) {
                     position.Left = tileRight;
                 }
             }
