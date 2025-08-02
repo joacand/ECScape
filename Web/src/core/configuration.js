@@ -1,7 +1,7 @@
 const Configuration = {
     TargetFrameRate: 120.0,
     MovementDecayRate: 20,
-    PlayerMovementVertical:450,
+    PlayerMovementVertical: 450,
     PlayerMovementHorizontal: 250,
     DefaultGravity: 1530,
     GameWidth: 896,
